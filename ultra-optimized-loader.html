@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultra Optimized Loader - Professional Frame Converter</title>
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --bg-dark: #0a0a1a;
+            --bg-card: #12122a;
+            --text: #e0e0e0;
+            --success: #00ff88;
+            --warning: #ffaa00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg-dark);
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: var(--text);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+        }
+
+        .upload-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            border: 2px dashed var(--primary);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 30px;
+        }
+
+        .upload-section:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .upload-section input { display: none; }
+
+        .methods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .method-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #333;
+        }
+
+        .method-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .method-card .badge {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: var(--success);
+            color: #000;
+        }
+
+        .preview-container {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .export-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .export-btn:hover {
+            background: #00b8e6;
+            transform: translateY(-1px);
+        }
+
+        .export-btn:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .comparison-table {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .best {
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .code-output {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .code-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .code-tab {
+            padding: 8px 16px;
+            border: 1px solid #333;
+            background: transparent;
+            color: var(--text);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .code-tab.active {
+            background: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+        }
+
+        .code-content {
+            position: relative;
+        }
+
+        .code-content textarea {
+            width: 100%;
+            height: 400px;
+            background: #000;
+            color: var(--primary);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            resize: vertical;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 8px 16px;
+            background: var(--primary);
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Loader Styles */
+        .css-keyframes-loader {
+            width: 120px;
+            height: 120px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .sprite-loader {
+            width: 120px;
+            height: 120px;
+            background-size: auto 100%;
+            background-repeat: no-repeat;
+        }
+
+        .js-loader {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+        }
+
+        @keyframes frameAnimation {
+            /* Will be dynamically generated */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Ultra Optimized Loader Converter</h1>
+
+        <div class="upload-section" id="uploadSection" onclick="document.getElementById('fileInput').click()">
+            <input type="file" id="fileInput" accept=".json">
+            <div style="font-size: 3rem; margin-bottom: 15px;">📁</div>
+            <div style="font-size: 1.1rem; color: var(--primary);">فایل Lottie JSON رو آپلود کن</div>
+            <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">یا فایل loader_kifpool2.json رو انتخاب کن</div>
+        </div>
+
+        <!-- Methods Grid -->
+        <div class="methods-grid hidden" id="methodsGrid">
+            <!-- Method 1: CSS Keyframes with Base64 -->
+            <div class="method-card">
+                <h3>
+                    🎨 CSS Keyframes + Base64
+                    <span class="badge" id="badge1">SIMPLE</span>
+                </h3>
+                <div class="preview-container">
+                    <div class="css-keyframes-loader" id="preview1"></div>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="size1">-</div>
+                        <div class="stat-label">حجم کل</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="gzip1">-</div>
+                        <div class="stat-label">بعد Gzip</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="fps1">-</div>
+                        <div class="stat-label">FPS</div>
+                    </div>
+                </div>
+                <button class="export-btn" onclick="exportMethod('keyframes')">📦 خروجی CSS Keyframes</button>
+            </div>
+
+            <!-- Method 2: Sprite Sheet -->
+            <div class="method-card">
+                <h3>
+                    🖼️ Sprite Sheet + Steps
+                    <span class="badge" style="background: var(--warning);">BEST SIZE</span>
+                </h3>
+                <div class="preview-container">
+                    <div class="sprite-loader" id="preview2"></div>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="size2">-</div>
+                        <div class="stat-label">حجم کل</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="gzip2">-</div>
+                        <div class="stat-label">بعد Gzip</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="fps2">-</div>
+                        <div class="stat-label">FPS</div>
+                    </div>
+                </div>
+                <button class="export-btn" onclick="exportMethod('sprite')">📦 خروجی Sprite Sheet</button>
+            </div>
+
+            <!-- Method 3: JS Animation -->
+            <div class="method-card">
+                <h3>
+                    ⚙️ JavaScript + requestAnimationFrame
+                    <span class="badge" style="background: #ff6b6b; color: #fff;">SMOOTH</span>
+                </h3>
+                <div class="preview-container">
+                    <img class="js-loader" id="preview3" src="" alt="">
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="size3">-</div>
+                        <div class="stat-label">حجم کل</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="gzip3">-</div>
+                        <div class="stat-label">بعد Gzip</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="fps3">-</div>
+                        <div class="stat-label">FPS</div</div>
+                    </div>
+                </div>
+                <button class="export-btn" onclick="exportMethod('js')">📦 خروجی JavaScript</button>
+            </div>
+
+            <!-- Method 4: CSS Variables -->
+            <div class="method-card">
+                <h3>
+                    🔧 CSS Variables + Animation
+                    <span class="badge" style="background: #9966ff;">MODERN</span>
+                </h3>
+                <div class="preview-container">
+                    <div class="css-keyframes-loader" id="preview4"></div>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="size4">-</div>
+                        <div class="stat-label">حجم کل</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="gzip4">-</div>
+                        <div class="stat-label">بعد Gzip</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="fps4">-</div>
+                        <div class="stat-label">FPS</div>
+                    </div>
+                </div>
+                <button class="export-btn" onclick="exportMethod('cssvar')">📦 خروجی CSS Variables</button>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="comparison-table hidden" id="comparisonTable">
+            <h3 style="color: var(--primary); margin-bottom: 15px;">📊 مقایسه روش‌ها</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>روش</th>
+                        <th>حجم خام</th>
+                        <th>Gzip تقریبی</th>
+                        <th>سازگاری</th>
+                        <th>کیفیت</th>
+                        <th>پیشنهاد</th>
+                    </tr>
+                </thead>
+                <tbody id="comparisonBody">
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Code Output -->
+        <div class="code-output hidden" id="codeOutput">
+            <h3 style="color: var(--primary); margin-bottom: 15px;">💻 کد آماده استفاده</h3>
+            <div class="code-tabs">
+                <button class="code-tab active" onclick="showTab('all')">کامل (HTML + CSS)</button>
+                <button class="code-tab" onclick="showTab('css')">فقط CSS</button>
+                <button class="code-tab" onclick="showTab('html')">فقط HTML</button>
+                <button class="code-tab" onclick="showTab('react')">React Component</button>
+                <button class="code-tab" onclick="showTab('vue')">Vue Component</button>
+            </div>
+            <div class="code-content">
+                <button class="copy-btn" onclick="copyCode()">📋 کپی</button>
+                <textarea id="codeArea" readonly></textarea>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                <button class="export-btn" style="flex: 1; min-width: 200px;" onclick="downloadFile('html')">💾 دانلود HTML</button>
+                <button class="export-btn" style="flex: 1; min-width: 200px;" onclick="downloadFile('css')">💾 دانلود CSS</button>
+                <button class="export-btn" style="flex: 1; min-width: 200px;" onclick="downloadFile('json')">💾 دانلود Frames JSON</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let frames = [];
+        let fps = 60;
+        let spriteDataUrl = '';
+        let currentMethod = 'keyframes';
+        let currentTab = 'all';
+        let animationId = null;
+        let jsCurrentFrame = 0;
+
+        // File input handler
+        document.getElementById('fileInput').addEventListener('change', handleFile);
+
+        function handleFile(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const lottieData = JSON.parse(event.target.result);
+                    processLottie(lottieData);
+                } catch (err) {
+                    alert('خطا در پردازش فایل: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function processLottie(data) {
+            // Extract frames
+            frames = [];
+            data.assets.forEach(asset => {
+                if (asset.p && asset.p.startsWith('data:image')) {
+                    frames.push(asset.p);
+                }
+            });
+
+            if (frames.length === 0) {
+                alert('فریمی پیدا نشد!');
+                return;
+            }
+
+            fps = data.fr || 60;
+
+            // Show UI
+            document.getElementById('uploadSection').classList.add('hidden');
+            document.getElementById('methodsGrid').classList.remove('hidden');
+            document.getElementById('comparisonTable').classList.remove('hidden');
+            document.getElementById('codeOutput').classList.remove('hidden');
+
+            // Generate all methods
+            generateAllMethods();
+        }
+
+        async function generateAllMethods() {
+            // Calculate sizes
+            const totalBase64Size = frames.reduce((sum, f) => sum + f.length, 0);
+
+            // Method 1: CSS Keyframes
+            const keyframesCSS = generateKeyframesCSS();
+            const keyframesSize = new Blob([keyframesCSS]).size;
+            document.getElementById('size1').textContent = formatSize(keyframesSize);
+            document.getElementById('gzip1').textContent = formatSize(keyframesSize * 0.85); // Base64 doesn't compress well
+            document.getElementById('fps1').textContent = Math.round(fps);
+
+            // Method 2: Sprite Sheet
+            await generateSpriteSheet();
+            const spriteSize = spriteDataUrl.length;
+            document.getElementById('size2').textContent = formatSize(spriteSize);
+            document.getElementById('gzip2').textContent = formatSize(spriteSize * 0.9);
+            document.getElementById('fps2').textContent = Math.round(fps);
+
+            // Method 3: JS Animation
+            const jsCode = generateJSAnimation();
+            const jsSize = new Blob([jsCode]).size;
+            document.getElementById('size3').textContent = formatSize(jsSize);
+            document.getElementById('gzip3').textContent = formatSize(jsSize * 0.85);
+            document.getElementById('fps3').textContent = Math.round(fps);
+
+            // Method 4: CSS Variables
+            const cssVarCode = generateCSSVariables();
+            const cssVarSize = new Blob([cssVarCode]).size;
+            document.getElementById('size4').textContent = formatSize(cssVarSize);
+            document.getElementById('gzip4').textContent = formatSize(cssVarSize * 0.85);
+            document.getElementById('fps4').textContent = Math.round(fps);
+
+            // Start previews
+            startPreviews();
+
+            // Update comparison table
+            updateComparisonTable(keyframesSize, spriteSize, jsSize, cssVarSize);
+
+            // Show default code
+            exportMethod('keyframes');
+        }
+
+        function generateKeyframesCSS() {
+            const duration = (frames.length / fps).toFixed(3);
+
+            let keyframes = `@keyframes wallet-loader {\n`;
+            frames.forEach((frame, i) => {
+                const percent = ((i / frames.length) * 100).toFixed(4);
+                keyframes += `  ${percent}% { background-image: url("${frame}"); }\n`;
+            });
+            keyframes += `}\n\n`;
+
+            const css = `/* Ultra Optimized Wallet Loader - CSS Keyframes Method */
+/* Frames: ${frames.length} | FPS: ${fps} | Duration: ${duration}s */
+
+.wallet-loader {
+  width: 120px;
+  height: 120px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: wallet-loader ${duration}s steps(1) infinite;
+  will-change: background-image;
+}
+
+${keyframes}`;
+
+            return css;
+        }
+
+        async function generateSpriteSheet() {
+            return new Promise((resolve) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // Horizontal sprite sheet
+                canvas.width = 120 * frames.length;
+                canvas.height = 120;
+
+                let loaded = 0;
+                frames.forEach((frame, i) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        ctx.drawImage(img, i * 120, 0, 120, 120);
+                        loaded++;
+                        if (loaded === frames.length) {
+                            spriteDataUrl = canvas.toDataURL('image/png');
+                            resolve();
+                        }
+                    };
+                    img.src = frame;
+                });
+            });
+        }
+
+        function generateJSAnimation() {
+            const duration = (frames.length / fps).toFixed(3);
+            const frameTime = (1000 / fps).toFixed(1);
+
+            return `<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Loader</title>
+    <style>
+        .wallet-loader {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0a0a1a; margin: 0;">
+    <img class="wallet-loader" id="loader" src="" alt="Loading">
+
+    <script>
+        const frames = ${JSON.stringify(frames)};
+        const fps = ${fps};
+        const frameTime = 1000 / fps;
+        let currentFrame = 0;
+        let lastTime = 0;
+        const loader = document.getElementById('loader');
+
+        function animate(timestamp) {
+            if (timestamp - lastTime >= frameTime) {
+                loader.src = frames[currentFrame];
+                currentFrame = (currentFrame + 1) % frames.length;
+                lastTime = timestamp;
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // Preload frames
+        frames.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
+
+        requestAnimationFrame(animate);
+    <\/script>
+</body>
+</html>`;
+        }
+
+        function generateCSSVariables() {
+            const duration = (frames.length / fps).toFixed(3);
+
+            let cssVars = `:root {\n`;
+            frames.forEach((frame, i) => {
+                cssVars += `  --frame-${i}: url("${frame}");\n`;
+            });
+            cssVars += `}\n\n`;
+
+            let keyframes = `@keyframes wallet-loader-var {\n`;
+            frames.forEach((frame, i) => {
+                const percent = ((i / frames.length) * 100).toFixed(4);
+                keyframes += `  ${percent}% { background-image: var(--frame-${i}); }\n`;
+            });
+            keyframes += `}\n`;
+
+            return `/* Ultra Optimized Wallet Loader - CSS Variables Method */
+/* Frames: ${frames.length} | FPS: ${fps} | Duration: ${duration}s */
+
+${cssVars}
+.wallet-loader {
+  width: 120px;
+  height: 120px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: wallet-loader-var ${duration}s steps(1) infinite;
+  will-change: background-image;
+}
+
+${keyframes}`;
+        }
+
+        function startPreviews() {
+            // Preview 1: CSS Keyframes
+            const style1 = document.createElement('style');
+            style1.textContent = generateKeyframesCSS();
+            document.head.appendChild(style1);
+            document.getElementById('preview1').classList.add('wallet-loader');
+
+            // Preview 2: Sprite Sheet
+            const duration = (frames.length / fps).toFixed(3);
+            const style2 = document.createElement('style');
+            style2.textContent = `
+                @keyframes sprite-animation {
+                    to { background-position: -${120 * frames.length}px 0; }
+                }
+                #preview2 {
+                    background-image: url("${spriteDataUrl}");
+                    animation: sprite-animation ${duration}s steps(${frames.length}) infinite;
+                }
+            `;
+            document.head.appendChild(style2);
+
+            // Preview 3: JS Animation
+            const preview3 = document.getElementById('preview3');
+            function animateJS(timestamp) {
+                if (!animationId) return;
+                preview3.src = frames[jsCurrentFrame];
+                jsCurrentFrame = (jsCurrentFrame + 1) % frames.length;
+                setTimeout(() => {
+                    animationId = requestAnimationFrame(animateJS);
+                }, 1000 / fps);
+            }
+            animationId = requestAnimationFrame(animateJS);
+
+            // Preview 4: CSS Variables
+            const style4 = document.createElement('style');
+            style4.textContent = generateCSSVariables().replace('wallet-loader-var', 'wallet-loader-var-4').replace('.wallet-loader', '#preview4');
+            document.head.appendChild(style4);
+            document.getElementById('preview4').style.animation = `wallet-loader-var-4 ${duration}s steps(1) infinite`;
+        }
+
+        function updateComparisonTable(keyframesSize, spriteSize, jsSize, cssVarSize) {
+            const sizes = [
+                { name: 'CSS Keyframes', size: keyframesSize, gzip: keyframesSize * 0.85, compat: '99%', quality: '⭐⭐⭐⭐⭐' },
+                { name: 'Sprite Sheet', size: spriteSize, gzip: spriteSize * 0.9, compat: '99%', quality: '⭐⭐⭐⭐⭐' },
+                { name: 'JavaScript', size: jsSize, gzip: jsSize * 0.85, compat: '99%', quality: '⭐⭐⭐⭐⭐' },
+                { name: 'CSS Variables', size: cssVarSize, gzip: cssVarSize * 0.85, compat: '95%', quality: '⭐⭐⭐⭐⭐' },
+            ];
+
+            const minSize = Math.min(...sizes.map(s => s.size));
+            const minGzip = Math.min(...sizes.map(s => s.gzip));
+
+            const tbody = document.getElementById('comparisonBody');
+            tbody.innerHTML = sizes.map(s => `
+                <tr>
+                    <td>${s.name}</td>
+                    <td class="${s.size === minSize ? 'best' : ''}">${formatSize(s.size)}</td>
+                    <td class="${s.gzip === minGzip ? 'best' : ''}">${formatSize(s.gzip)}</td>
+                    <td>${s.compat}</td>
+                    <td>${s.quality}</td>
+                    <td>${s.size === minSize ? '✅ پیشنهادی' : ''}</td>
+                </tr>
+            `).join('');
+        }
+
+        function exportMethod(method) {
+            currentMethod = method;
+            showTab(currentTab);
+        }
+
+        function showTab(tab) {
+            currentTab = tab;
+
+            // Update tab buttons
+            document.querySelectorAll('.code-tab').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.toLowerCase().includes(tab) ||
+                    (tab === 'all' && btn.textContent.includes('کامل'))) {
+                    btn.classList.add('active');
+                }
+            });
+
+            let code = '';
+            const duration = (frames.length / fps).toFixed(3);
+
+            if (currentMethod === 'keyframes') {
+                code = generateKeyframesOutput(tab, duration);
+            } else if (currentMethod === 'sprite') {
+                code = generateSpriteOutput(tab, duration);
+            } else if (currentMethod === 'js') {
+                code = generateJSOutput(tab, duration);
+            } else if (currentMethod === 'cssvar') {
+                code = generateCSSVarOutput(tab, duration);
+            }
+
+            document.getElementById('codeArea').value = code;
+        }
+
+        function generateKeyframesOutput(tab, duration) {
+            const css = generateKeyframesCSS();
+            const html = `<div class="wallet-loader"></div>`;
+
+            if (tab === 'css') return css;
+            if (tab === 'html') return html;
+            if (tab === 'react') return generateReactComponent(css);
+            if (tab === 'vue') return generateVueComponent(css);
+
+            return `<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Loader</title>
+    <style>
+${css}
+    </style>
+</head>
+<body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0a0a1a; margin: 0;">
+    ${html}
+</body>
+</html>`;
+        }
+
+        function generateSpriteOutput(tab, duration) {
+            const css = `/* Sprite Sheet Method - Most Efficient */
+.wallet-loader {
+    width: 120px;
+    height: 120px;
+    background-image: url("${spriteDataUrl}");
+    background-size: ${frames.length * 100}% 100%;
+    animation: sprite-animation ${duration}s steps(${frames.length}) infinite;
+    will-change: background-position;
+}
+
+@keyframes sprite-animation {
+    to { background-position: -${120 * frames.length}px 0; }
+}`;
+
+            const html = `<div class="wallet-loader"></div>`;
+
+            if (tab === 'css') return css;
+            if (tab === 'html') return html;
+            if (tab === 'react') return generateReactComponent(css);
+            if (tab === 'vue') return generateVueComponent(css);
+
+            return `<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Loader</title>
+    <style>
+${css}
+    </style>
+</head>
+<body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0a0a1a; margin: 0;">
+    ${html}
+</body>
+</html>`;
+        }
+
+        function generateJSOutput(tab, duration) {
+            if (tab === 'css') return `/* JS Method - No CSS Animation Required */
+.wallet-loader {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+}`;
+            if (tab === 'html') return `<img class="wallet-loader" id="loader" src="" alt="Loading">`;
+            if (tab === 'react') return generateReactJSComponent();
+            if (tab === 'vue') return generateVueJSComponent();
+
+            return generateJSAnimation();
+        }
+
+        function generateCSSVarOutput(tab, duration) {
+            const css = generateCSSVariables();
+            const html = `<div class="wallet-loader"></div>`;
+
+            if (tab === 'css') return css;
+            if (tab === 'html') return html;
+            if (tab === 'react') return generateReactComponent(css);
+            if (tab === 'vue') return generateVueComponent(css);
+
+            return `<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Loader</title>
+    <style>
+${css}
+    </style>
+</head>
+<body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0a0a1a; margin: 0;">
+    ${html}
+</body>
+</html>`;
+        }
+
+        function generateReactComponent(css) {
+            return `import React from 'react';
+
+const WalletLoader = ({ size = 120 }) => {
+    return (
+        <>
+            <style>{\`
+${css.split('\n').map(l => '                ' + l).join('\n')}
+            \`}</style>
+            <div
+                className="wallet-loader"
+                style={{ width: size, height: size }}
+            />
+        </>
+    );
+};
+
+export default WalletLoader;`;
+        }
+
+        function generateReactJSComponent() {
+            return `import React, { useEffect, useRef, useState } from 'react';
+
+const frames = ${JSON.stringify(frames)};
+const fps = ${fps};
+
+const WalletLoader = ({ size = 120 }) => {
+    const [currentFrame, setCurrentFrame] = useState(0);
+    const animationRef = useRef();
+    const lastTimeRef = useRef(0);
+
+    useEffect(() => {
+        const frameTime = 1000 / fps;
+
+        const animate = (timestamp) => {
+            if (timestamp - lastTimeRef.current >= frameTime) {
+                setCurrentFrame(f => (f + 1) % frames.length);
+                lastTimeRef.current = timestamp;
+            }
+            animationRef.current = requestAnimationFrame(animate);
+        };
+
+        animationRef.current = requestAnimationFrame(animate);
+
+        return () => cancelAnimationFrame(animationRef.current);
+    }, []);
+
+    return (
+        <img
+            src={frames[currentFrame]}
+            alt="Loading"
+            style={{ width: size, height: size, objectFit: 'contain' }}
+        />
+    );
+};
+
+export default WalletLoader;`;
+        }
+
+        function generateVueComponent(css) {
+            return `<template>
+    <div class="wallet-loader" :style="{ width: size + 'px', height: size + 'px' }"></div>
+</template>
+
+<script>
+export default {
+    name: 'WalletLoader',
+    props: {
+        size: {
+            type: Number,
+            default: 120
+        }
+    }
+};
+</script>
+
+<style scoped>
+${css}
+</style>`;
+        }
+
+        function generateVueJSComponent() {
+            return `<template>
+    <img
+        :src="frames[currentFrame]"
+        alt="Loading"
+        :style="{ width: size + 'px', height: size + 'px', objectFit: 'contain' }"
+    />
+</template>
+
+<script>
+const frames = ${JSON.stringify(frames)};
+
+export default {
+    name: 'WalletLoader',
+    props: {
+        size: {
+            type: Number,
+            default: 120
+        }
+    },
+    data() {
+        return {
+            frames,
+            currentFrame: 0,
+            animationId: null
+        };
+    },
+    mounted() {
+        const fps = ${fps};
+        const frameTime = 1000 / fps;
+        let lastTime = 0;
+
+        const animate = (timestamp) => {
+            if (timestamp - lastTime >= frameTime) {
+                this.currentFrame = (this.currentFrame + 1) % this.frames.length;
+                lastTime = timestamp;
+            }
+            this.animationId = requestAnimationFrame(animate);
+        };
+
+        this.animationId = requestAnimationFrame(animate);
+    },
+    beforeUnmount() {
+        cancelAnimationFrame(this.animationId);
+    }
+};
+</script>`;
+        }
+
+        function copyCode() {
+            const textarea = document.getElementById('codeArea');
+            textarea.select();
+            document.execCommand('copy');
+            alert('کد کپی شد! ✅');
+        }
+
+        function downloadFile(type) {
+            const code = document.getElementById('codeArea').value;
+            let blob, filename;
+
+            if (type === 'html') {
+                blob = new Blob([code], { type: 'text/html' });
+                filename = `wallet-loader-${currentMethod}.html`;
+            } else if (type === 'css') {
+                blob = new Blob([code], { type: 'text/css' });
+                filename = `wallet-loader-${currentMethod}.css`;
+            } else if (type === 'json') {
+                const data = { frames, fps, totalFrames: frames.length };
+                blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                filename = 'wallet-loader-frames.json';
+            }
+
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+    </script>
+</body>
+</html>
