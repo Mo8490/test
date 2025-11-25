@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Loader Animation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0a0a1a;
+        }
+
+        .wallet-loader {
+            width: 120px;
+            height: 120px;
+            position: relative;
+        }
+
+        .wallet-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            animation: wallet-sequence 2.5s ease-in-out infinite;
+        }
+
+        /* Main Wallet SVG */
+        .wallet-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+        }
+
+        /* Wallet Base */
+        .wallet-base {
+            fill: #3B82F6;
+            animation: wallet-color 2.5s ease-in-out infinite;
+        }
+
+        /* Wallet Flap */
+        .wallet-flap {
+            fill: #60A5FA;
+            transform-origin: 50% 30%;
+            animation: flap-open 2.5s ease-in-out infinite;
+        }
+
+        /* Particles Container */
+        .particles {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            opacity: 0;
+            animation: particle-burst 2.5s ease-out infinite;
+        }
+
+        /* Different colored particles */
+        .particle:nth-child(1) { background: #F472B6; animation-delay: 0.3s; --tx: -30px; --ty: -40px; --rot: 45deg; }
+        .particle:nth-child(2) { background: #FBBF24; animation-delay: 0.35s; --tx: 30px; --ty: -35px; --rot: -30deg; }
+        .particle:nth-child(3) { background: #34D399; animation-delay: 0.4s; --tx: -40px; --ty: 10px; --rot: 60deg; }
+        .particle:nth-child(4) { background: #F87171; animation-delay: 0.32s; --tx: 35px; --ty: 15px; --rot: -45deg; }
+        .particle:nth-child(5) { background: #A78BFA; animation-delay: 0.38s; --tx: -20px; --ty: -50px; --rot: 30deg; }
+        .particle:nth-child(6) { background: #38BDF8; animation-delay: 0.36s; --tx: 25px; --ty: -45px; --rot: -60deg; }
+        .particle:nth-child(7) { background: #FB923C; animation-delay: 0.42s; --tx: -45px; --ty: -20px; --rot: 15deg; }
+        .particle:nth-child(8) { background: #E879F9; animation-delay: 0.34s; --tx: 40px; --ty: -10px; --rot: -15deg; }
+        .particle:nth-child(9) { background: #4ADE80; animation-delay: 0.44s; --tx: 0px; --ty: -55px; --rot: 0deg; }
+        .particle:nth-child(10) { background: #F472B6; animation-delay: 0.37s; --tx: -35px; --ty: 25px; --rot: 90deg; }
+        .particle:nth-child(11) { background: #FBBF24; animation-delay: 0.41s; --tx: 38px; --ty: 30px; --rot: -90deg; }
+        .particle:nth-child(12) { background: #60A5FA; animation-delay: 0.39s; --tx: -15px; --ty: 40px; --rot: 120deg; }
+
+        /* Small star particles */
+        .star {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            opacity: 0;
+            animation: star-burst 2.5s ease-out infinite;
+        }
+
+        .star::before {
+            content: '✦';
+            font-size: 10px;
+            color: #FBBF24;
+        }
+
+        .star:nth-child(1) { animation-delay: 0.33s; --tx: -25px; --ty: -30px; }
+        .star:nth-child(2) { animation-delay: 0.38s; --tx: 28px; --ty: -28px; }
+        .star:nth-child(3) { animation-delay: 0.43s; --tx: -30px; --ty: 20px; }
+        .star:nth-child(4) { animation-delay: 0.35s; --tx: 32px; --ty: 25px; }
+
+        /* Coin element */
+        .coin {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, #FBBF24, #F59E0B);
+            border-radius: 50%;
+            opacity: 0;
+            box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2), inset 2px 2px 4px rgba(255,255,255,0.3);
+            animation: coin-pop 2.5s ease-out infinite;
+            animation-delay: 0.35s;
+        }
+
+        .coin::after {
+            content: '$';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            font-weight: bold;
+            color: #92400E;
+        }
+
+        /* Card element */
+        .card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 14px;
+            background: linear-gradient(135deg, #EC4899, #DB2777);
+            border-radius: 2px;
+            opacity: 0;
+            animation: card-pop 2.5s ease-out infinite;
+            animation-delay: 0.4s;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 8px;
+            height: 5px;
+            background: #FBBF24;
+            border-radius: 1px;
+        }
+
+        /* Glow effect */
+        .glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: glow-pulse 2.5s ease-in-out infinite;
+        }
+
+        /* Keyframes */
+        @keyframes wallet-color {
+            0%, 15% { fill: #3B82F6; }
+            20%, 35% { fill: #EC4899; }
+            40%, 55% { fill: #F97316; }
+            60%, 100% { fill: #3B82F6; }
+        }
+
+        @keyframes flap-open {
+            0%, 15% { transform: rotateX(0deg); }
+            20%, 25% { transform: rotateX(-30deg); }
+            30%, 35% { transform: rotateX(-20deg); }
+            40%, 100% { transform: rotateX(0deg); }
+        }
+
+        @keyframes particle-burst {
+            0%, 25% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0);
+            }
+            30% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(var(--rot));
+            }
+            60%, 100% {
+                opacity: 0;
+                transform: translate(calc(-50% + var(--tx) * 1.5), calc(-50% + var(--ty) * 1.5)) scale(0) rotate(var(--rot));
+            }
+        }
+
+        @keyframes star-burst {
+            0%, 25% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0);
+            }
+            30% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.2);
+            }
+            60%, 100% {
+                opacity: 0;
+                transform: translate(calc(-50% + var(--tx) * 1.3), calc(-50% + var(--ty) * 1.3)) scale(0);
+            }
+        }
+
+        @keyframes coin-pop {
+            0%, 25% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0);
+            }
+            32% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            45% {
+                opacity: 1;
+                transform: translate(calc(-50% + 20px), calc(-50% - 35px)) scale(1) rotate(360deg);
+            }
+            55%, 100% {
+                opacity: 0;
+                transform: translate(calc(-50% + 25px), calc(-50% - 20px)) scale(0) rotate(720deg);
+            }
+        }
+
+        @keyframes card-pop {
+            0%, 28% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0) rotate(-20deg);
+            }
+            35% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.1) rotate(-10deg);
+            }
+            48% {
+                opacity: 1;
+                transform: translate(calc(-50% - 25px), calc(-50% - 30px)) scale(1) rotate(15deg);
+            }
+            58%, 100% {
+                opacity: 0;
+                transform: translate(calc(-50% - 30px), calc(-50% - 15px)) scale(0) rotate(30deg);
+            }
+        }
+
+        @keyframes glow-pulse {
+            0%, 18% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            25%, 40% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+            50%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+        }
+
+        /* Background decoration */
+        .bg-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+
+    <div class="wallet-loader">
+        <!-- Glow effect -->
+        <div class="glow"></div>
+
+        <!-- Main wallet -->
+        <div class="wallet-container">
+            <svg class="wallet-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Wallet body -->
+                <rect class="wallet-base" x="8" y="20" width="48" height="36" rx="4"/>
+                <!-- Wallet flap -->
+                <path class="wallet-flap" d="M8 24C8 21.7909 9.79086 20 12 20H52C54.2091 20 56 21.7909 56 24V28H8V24Z"/>
+                <!-- Wallet clasp -->
+                <rect x="36" y="24" width="12" height="8" rx="2" fill="#1E40AF"/>
+                <!-- Card slot lines -->
+                <rect x="14" y="36" width="20" height="2" rx="1" fill="#2563EB" opacity="0.5"/>
+                <rect x="14" y="42" width="16" height="2" rx="1" fill="#2563EB" opacity="0.5"/>
+            </svg>
+        </div>
+
+        <!-- Particles -->
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+
+        <!-- Stars -->
+        <div class="particles">
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+        </div>
+
+        <!-- Coin -->
+        <div class="coin"></div>
+
+        <!-- Card -->
+        <div class="card"></div>
+    </div>
+</body>
+</html>
