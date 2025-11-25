@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pure SVG Wallet Loader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #0a0a1a;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #fff;
+            gap: 30px;
+        }
+
+        h1 {
+            color: #00d4ff;
+            font-size: 1.5rem;
+        }
+
+        .loader-container {
+            width: 120px;
+            height: 120px;
+            position: relative;
+        }
+
+        /* Hide all frames by default */
+        .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+
+        /* Animation keyframes for each frame */
+        .frame { animation: frame-visibility 2.4s steps(1) infinite; }
+        .frame:nth-child(1) { animation-delay: 0s; }
+        .frame:nth-child(2) { animation-delay: 0.1s; }
+        .frame:nth-child(3) { animation-delay: 0.2s; }
+        .frame:nth-child(4) { animation-delay: 0.3s; }
+        .frame:nth-child(5) { animation-delay: 0.4s; }
+        .frame:nth-child(6) { animation-delay: 0.5s; }
+        .frame:nth-child(7) { animation-delay: 0.6s; }
+        .frame:nth-child(8) { animation-delay: 0.7s; }
+        .frame:nth-child(9) { animation-delay: 0.8s; }
+        .frame:nth-child(10) { animation-delay: 0.9s; }
+        .frame:nth-child(11) { animation-delay: 1.0s; }
+        .frame:nth-child(12) { animation-delay: 1.1s; }
+        .frame:nth-child(13) { animation-delay: 1.2s; }
+        .frame:nth-child(14) { animation-delay: 1.3s; }
+        .frame:nth-child(15) { animation-delay: 1.4s; }
+        .frame:nth-child(16) { animation-delay: 1.5s; }
+        .frame:nth-child(17) { animation-delay: 1.6s; }
+        .frame:nth-child(18) { animation-delay: 1.7s; }
+        .frame:nth-child(19) { animation-delay: 1.8s; }
+        .frame:nth-child(20) { animation-delay: 1.9s; }
+        .frame:nth-child(21) { animation-delay: 2.0s; }
+        .frame:nth-child(22) { animation-delay: 2.1s; }
+        .frame:nth-child(23) { animation-delay: 2.2s; }
+        .frame:nth-child(24) { animation-delay: 2.3s; }
+
+        @keyframes frame-visibility {
+            0%, 4.166% { opacity: 1; }
+            4.167%, 100% { opacity: 0; }
+        }
+
+        .info {
+            color: #888;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .controls button {
+            background: #00d4ff;
+            color: #0a0a1a;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .controls button:hover {
+            background: #00b8e6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pure SVG Wallet Loader - 24 Frames</h1>
+
+    <div class="loader-container">
+        <!-- Frame 1: Wallet closed, idle -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Background glow -->
+                <circle cx="60" cy="60" r="50" fill="url(#glow1)" opacity="0.3"/>
+                <!-- Wallet body -->
+                <rect x="25" y="40" width="70" height="50" rx="8" fill="#3B82F6"/>
+                <rect x="25" y="40" width="70" height="15" rx="8" fill="#60A5FA"/>
+                <!-- Clasp -->
+                <rect x="70" y="45" width="18" height="8" rx="3" fill="#1E40AF"/>
+                <!-- Lines -->
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#2563EB" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#2563EB" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow1"><stop stop-color="#3B82F6"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 2: Wallet starting to glow -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="50" fill="url(#glow2)" opacity="0.4"/>
+                <rect x="25" y="40" width="70" height="50" rx="8" fill="#4F8FF7"/>
+                <rect x="25" y="40" width="70" height="15" rx="8" fill="#70B0FA"/>
+                <rect x="70" y="45" width="18" height="8" rx="3" fill="#2050C0"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#3070E8" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#3070E8" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow2"><stop stop-color="#5090F8"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 3: Wallet glowing more, color shifting -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="52" fill="url(#glow3)" opacity="0.5"/>
+                <rect x="25" y="40" width="70" height="50" rx="8" fill="#6B7FF8"/>
+                <rect x="25" y="40" width="70" height="15" rx="8" fill="#8BA0FA"/>
+                <rect x="70" y="45" width="18" height="8" rx="3" fill="#3040D0"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#5060F0" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#5060F0" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow3"><stop stop-color="#7080F8"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 4: Color shifting to pink -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="54" fill="url(#glow4)" opacity="0.6"/>
+                <rect x="25" y="40" width="70" height="50" rx="8" fill="#A855F7"/>
+                <rect x="25" y="40" width="70" height="14" rx="8" fill="#C080FA"/>
+                <rect x="70" y="45" width="18" height="8" rx="3" fill="#6030C0"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#8040E0" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#8040E0" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow4"><stop stop-color="#A060F0"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 5: Pink wallet, flap starting to open -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="55" fill="url(#glow5)" opacity="0.7"/>
+                <rect x="25" y="42" width="70" height="48" rx="8" fill="#EC4899"/>
+                <path d="M25 50 Q25 40 35 38 L85 38 Q95 40 95 50 L95 54 L25 54 Z" fill="#F472B6"/>
+                <rect x="70" y="43" width="18" height="8" rx="3" fill="#9D174D"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#DB2777" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#DB2777" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow5"><stop stop-color="#EC4899"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 6: Flap more open, coin appearing -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="55" fill="url(#glow6)" opacity="0.8"/>
+                <rect x="25" y="44" width="70" height="46" rx="8" fill="#EC4899"/>
+                <path d="M25 48 Q25 35 35 32 L85 32 Q95 35 95 48 L95 52 L25 52 Z" fill="#F472B6"/>
+                <rect x="70" y="38" width="18" height="8" rx="3" fill="#9D174D"/>
+                <!-- Coin starting to appear -->
+                <circle cx="60" cy="48" r="6" fill="#FBBF24"/>
+                <text x="60" y="51" font-size="8" fill="#92400E" text-anchor="middle" font-weight="bold">$</text>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#DB2777" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#DB2777" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow6"><stop stop-color="#EC4899"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 7: Coin rising, card appearing -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="55" fill="url(#glow7)" opacity="0.8"/>
+                <rect x="25" y="46" width="70" height="44" rx="8" fill="#EC4899"/>
+                <path d="M25 48 Q25 32 35 28 L85 28 Q95 32 95 48 L95 50 L25 50 Z" fill="#F472B6"/>
+                <!-- Coin rising -->
+                <circle cx="65" cy="38" r="8" fill="#FBBF24"/>
+                <text x="65" y="42" font-size="9" fill="#92400E" text-anchor="middle" font-weight="bold">$</text>
+                <!-- Card appearing -->
+                <rect x="45" y="42" width="16" height="11" rx="2" fill="#EC4899" stroke="#F472B6" stroke-width="1"/>
+                <rect x="48" y="45" width="6" height="4" rx="1" fill="#FBBF24"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#DB2777" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow7"><stop stop-color="#EC4899"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 8: Items flying out, particles appearing -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="55" fill="url(#glow8)" opacity="0.9"/>
+                <rect x="25" y="48" width="70" height="42" rx="8" fill="#F97316"/>
+                <path d="M25 50 Q25 35 35 30 L85 30 Q95 35 95 50 L95 52 L25 52 Z" fill="#FB923C"/>
+                <!-- Coin flying -->
+                <circle cx="75" cy="28" r="9" fill="#FBBF24"/>
+                <text x="75" y="32" font-size="10" fill="#92400E" text-anchor="middle" font-weight="bold">$</text>
+                <!-- Card flying -->
+                <rect x="35" y="25" width="18" height="12" rx="2" fill="#EC4899" transform="rotate(-15 44 31)"/>
+                <rect x="38" y="28" width="7" height="4" rx="1" fill="#FBBF24" transform="rotate(-15 44 31)"/>
+                <!-- Particles -->
+                <circle cx="85" cy="35" r="4" fill="#F472B6"/>
+                <circle cx="30" cy="30" r="3" fill="#34D399"/>
+                <circle cx="50" cy="20" r="3" fill="#FBBF24"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#C2410C" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow8"><stop stop-color="#F97316"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 9: Maximum explosion, many particles -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="58" fill="url(#glow9)" opacity="1"/>
+                <rect x="25" y="50" width="70" height="40" rx="8" fill="#F97316"/>
+                <path d="M25 52 Q25 38 35 33 L85 33 Q95 38 95 52 L95 54 L25 54 Z" fill="#FB923C"/>
+                <!-- Coin flying high -->
+                <circle cx="82" cy="18" r="10" fill="#FBBF24"/>
+                <text x="82" y="22" font-size="11" fill="#92400E" text-anchor="middle" font-weight="bold">$</text>
+                <!-- Card flying -->
+                <rect x="25" y="15" width="20" height="14" rx="2" fill="#EC4899" transform="rotate(-25 35 22)"/>
+                <rect x="28" y="18" width="8" height="5" rx="1" fill="#FBBF24" transform="rotate(-25 35 22)"/>
+                <!-- Many particles -->
+                <circle cx="95" cy="25" r="5" fill="#F472B6"/>
+                <circle cx="20" cy="22" r="4" fill="#34D399"/>
+                <circle cx="55" cy="10" r="4" fill="#FBBF24"/>
+                <circle cx="100" cy="45" r="3" fill="#A78BFA"/>
+                <circle cx="15" cy="45" r="3" fill="#38BDF8"/>
+                <rect x="40" y="8" width="6" height="6" rx="1" fill="#FB923C" transform="rotate(30 43 11)"/>
+                <rect x="70" cy="12" width="5" height="5" rx="1" fill="#4ADE80" transform="rotate(-20 72 14)"/>
+                <!-- Stars -->
+                <text x="88" y="38" font-size="10" fill="#FBBF24">✦</text>
+                <text x="28" y="38" font-size="8" fill="#FBBF24">✦</text>
+                <text x="60" y="5" font-size="8" fill="#FBBF24">✦</text>
+                <defs>
+                    <radialGradient id="glow9"><stop stop-color="#F97316"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 10: Peak burst -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="60" fill="url(#glow10)" opacity="1"/>
+                <rect x="25" y="50" width="70" height="40" rx="8" fill="#F97316"/>
+                <path d="M25 52 Q25 38 35 33 L85 33 Q95 38 95 52 L95 54 L25 54 Z" fill="#FB923C"/>
+                <!-- Coin at peak -->
+                <circle cx="88" cy="12" r="10" fill="#FBBF24"/>
+                <text x="88" y="16" font-size="11" fill="#92400E" text-anchor="middle" font-weight="bold">$</text>
+                <!-- Card at peak -->
+                <rect x="18" y="8" width="20" height="14" rx="2" fill="#EC4899" transform="rotate(-35 28 15)"/>
+                <rect x="21" y="11" width="8" height="5" rx="1" fill="#FBBF24" transform="rotate(-35 28 15)"/>
+                <!-- Maximum particles -->
+                <circle cx="100" cy="20" r="5" fill="#F472B6"/>
+                <circle cx="12" cy="18" r="5" fill="#34D399"/>
+                <circle cx="60" cy="5" r="5" fill="#FBBF24"/>
+                <circle cx="105" cy="50" r="4" fill="#A78BFA"/>
+                <circle cx="10" cy="50" r="4" fill="#38BDF8"/>
+                <circle cx="45" cy="2" r="4" fill="#F87171"/>
+                <circle cx="75" cy="3" r="3" fill="#E879F9"/>
+                <rect x="35" y="3" width="7" height="7" rx="1" fill="#FB923C" transform="rotate(45 38 6)"/>
+                <rect x="80" y="30" width="6" height="6" rx="1" fill="#4ADE80" transform="rotate(-30 83 33)"/>
+                <rect x="25" y="28" width="5" height="5" rx="1" fill="#60A5FA" transform="rotate(20 27 30)"/>
+                <!-- Stars -->
+                <text x="95" y="35" font-size="12" fill="#FBBF24">✦</text>
+                <text x="20" y="40" font-size="10" fill="#FBBF24">✦</text>
+                <text x="55" y="0" font-size="10" fill="#FBBF24">✦</text>
+                <text x="40" y="15" font-size="8" fill="#FFF">✦</text>
+                <text x="75" y="20" font-size="8" fill="#FFF">✦</text>
+                <defs>
+                    <radialGradient id="glow10"><stop stop-color="#FB923C"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 11: Particles starting to fade -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="58" fill="url(#glow11)" opacity="0.9"/>
+                <rect x="25" y="50" width="70" height="40" rx="8" fill="#F97316"/>
+                <path d="M25 52 Q25 40 35 35 L85 35 Q95 40 95 52 L95 54 L25 54 Z" fill="#FB923C"/>
+                <!-- Coin descending -->
+                <circle cx="85" cy="18" r="9" fill="#FBBF24" opacity="0.9"/>
+                <text x="85" y="22" font-size="10" fill="#92400E" text-anchor="middle" font-weight="bold" opacity="0.9">$</text>
+                <!-- Card descending -->
+                <rect x="22" y="12" width="18" height="12" rx="2" fill="#EC4899" transform="rotate(-30 31 18)" opacity="0.9"/>
+                <!-- Particles fading -->
+                <circle cx="98" cy="25" r="4" fill="#F472B6" opacity="0.8"/>
+                <circle cx="15" cy="22" r="4" fill="#34D399" opacity="0.8"/>
+                <circle cx="58" cy="8" r="4" fill="#FBBF24" opacity="0.8"/>
+                <circle cx="102" cy="48" r="3" fill="#A78BFA" opacity="0.7"/>
+                <circle cx="12" cy="48" r="3" fill="#38BDF8" opacity="0.7"/>
+                <text x="92" y="40" font-size="10" fill="#FBBF24" opacity="0.8">✦</text>
+                <text x="25" y="38" font-size="8" fill="#FBBF24" opacity="0.8">✦</text>
+                <defs>
+                    <radialGradient id="glow11"><stop stop-color="#F97316"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 12: More fading -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="56" fill="url(#glow12)" opacity="0.8"/>
+                <rect x="25" y="48" width="70" height="42" rx="8" fill="#EA580C"/>
+                <path d="M25 50 Q25 42 35 38 L85 38 Q95 42 95 50 L95 52 L25 52 Z" fill="#FB923C"/>
+                <!-- Coin coming back -->
+                <circle cx="78" cy="28" r="8" fill="#FBBF24" opacity="0.7"/>
+                <text x="78" y="32" font-size="9" fill="#92400E" text-anchor="middle" font-weight="bold" opacity="0.7">$</text>
+                <!-- Card coming back -->
+                <rect x="30" y="22" width="16" height="11" rx="2" fill="#EC4899" transform="rotate(-20 38 27)" opacity="0.7"/>
+                <!-- Few particles -->
+                <circle cx="92" cy="32" r="3" fill="#F472B6" opacity="0.5"/>
+                <circle cx="22" cy="30" r="3" fill="#34D399" opacity="0.5"/>
+                <circle cx="55" cy="15" r="3" fill="#FBBF24" opacity="0.5"/>
+                <text x="85" y="45" font-size="8" fill="#FBBF24" opacity="0.5">✦</text>
+                <defs>
+                    <radialGradient id="glow12"><stop stop-color="#EA580C"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 13: Items returning to wallet -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="54" fill="url(#glow13)" opacity="0.7"/>
+                <rect x="25" y="46" width="70" height="44" rx="8" fill="#C2410C"/>
+                <path d="M25 48 Q25 44 35 40 L85 40 Q95 44 95 48 L95 50 L25 50 Z" fill="#EA580C"/>
+                <!-- Coin entering -->
+                <circle cx="70" cy="38" r="6" fill="#FBBF24" opacity="0.5"/>
+                <text x="70" y="41" font-size="7" fill="#92400E" text-anchor="middle" opacity="0.5">$</text>
+                <!-- Card entering -->
+                <rect x="42" y="35" width="14" height="10" rx="2" fill="#EC4899" transform="rotate(-10 49 40)" opacity="0.5"/>
+                <!-- Particles nearly gone -->
+                <circle cx="85" cy="38" r="2" fill="#F472B6" opacity="0.3"/>
+                <circle cx="30" cy="35" r="2" fill="#34D399" opacity="0.3"/>
+                <defs>
+                    <radialGradient id="glow13"><stop stop-color="#C2410C"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 14: Wallet closing -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="52" fill="url(#glow14)" opacity="0.6"/>
+                <rect x="25" y="44" width="70" height="46" rx="8" fill="#9A3412"/>
+                <path d="M25 46 Q25 44 35 42 L85 42 Q95 44 95 46 L95 48 L25 48 Z" fill="#C2410C"/>
+                <rect x="70" y="43" width="18" height="8" rx="3" fill="#7C2D12"/>
+                <rect x="32" y="58" width="30" height="3" rx="1.5" fill="#C2410C" opacity="0.5"/>
+                <rect x="32" y="66" width="22" height="3" rx="1.5" fill="#C2410C" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow14"><stop stop-color="#9A3412"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 15: Color shifting back to purple -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="52" fill="url(#glow15)" opacity="0.5"/>
+                <rect x="25" y="42" width="70" height="48" rx="8" fill="#7C3AED"/>
+                <rect x="25" y="42" width="70" height="14" rx="8" fill="#A78BFA"/>
+                <rect x="70" y="46" width="18" height="8" rx="3" fill="#5B21B6"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#7C3AED" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#7C3AED" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow15"><stop stop-color="#7C3AED"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 16: Shifting to cyan -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="51" fill="url(#glow16)" opacity="0.45"/>
+                <rect x="25" y="41" width="70" height="49" rx="8" fill="#6366F1"/>
+                <rect x="25" y="41" width="70" height="14" rx="8" fill="#818CF8"/>
+                <rect x="70" y="45" width="18" height="8" rx="3" fill="#4338CA"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#6366F1" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#6366F1" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow16"><stop stop-color="#6366F1"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 17: More blue -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="51" fill="url(#glow17)" opacity="0.4"/>
+                <rect x="25" y="40" width="70" height="50" rx="8" fill="#4F46E5"/>
+                <rect x="25" y="40" width="70" height="15" rx="8" fill="#6366F1"/>
+                <rect x="70" y="45" width="18" height="8" rx="3" fill="#3730A3"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#4F46E5" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#4F46E5" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow17"><stop stop-color="#4F46E5"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 18: Approaching original blue -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="50" fill="url(#glow18)" opacity="0.38"/>
+                <rect x="25" y="40" width="70" height="50" rx="8" fill="#4338CA"/>
+                <rect x="25" y="40" width="70" height="15" rx="8" fill="#6366F1"/>
+                <rect x="70" y="45" width="18" height="8" rx="3" fill="#312E81"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#4338CA" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#4338CA" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow18"><stop stop-color="#4338CA"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 19: Almost original -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="50" fill="url(#glow19)" opacity="0.36"/>
+                <rect x="25" y="40" width="70" height="50" rx="8" fill="#3B5CF6"/>
+                <rect x="25" y="40" width="70" height="15" rx="8" fill="#5B7CFA"/>
+                <rect x="70" y="45" width="18" height="8" rx="3" fill="#2040C0"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#3050E0" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#3050E0" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow19"><stop stop-color="#3B5CF6"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 20: Back to original -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="50" fill="url(#glow20)" opacity="0.34"/>
+                <rect x="25" y="40" width="70" height="50" rx="8" fill="#3B82F6"/>
+                <rect x="25" y="40" width="70" height="15" rx="8" fill="#60A5FA"/>
+                <rect x="70" y="45" width="18" height="8" rx="3" fill="#1E40AF"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#2563EB" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#2563EB" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow20"><stop stop-color="#3B82F6"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 21: Idle pulse 1 -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="50" fill="url(#glow21)" opacity="0.32"/>
+                <rect x="25" y="40" width="70" height="50" rx="8" fill="#3B82F6"/>
+                <rect x="25" y="40" width="70" height="15" rx="8" fill="#60A5FA"/>
+                <rect x="70" y="45" width="18" height="8" rx="3" fill="#1E40AF"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#2563EB" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#2563EB" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow21"><stop stop-color="#3B82F6"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 22: Idle pulse 2 -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="50" fill="url(#glow22)" opacity="0.30"/>
+                <rect x="25" y="40" width="70" height="50" rx="8" fill="#3B82F6"/>
+                <rect x="25" y="40" width="70" height="15" rx="8" fill="#60A5FA"/>
+                <rect x="70" y="45" width="18" height="8" rx="3" fill="#1E40AF"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#2563EB" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#2563EB" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow22"><stop stop-color="#3B82F6"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 23: Idle pulse 3 -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="50" fill="url(#glow23)" opacity="0.28"/>
+                <rect x="25" y="40" width="70" height="50" rx="8" fill="#3B82F6"/>
+                <rect x="25" y="40" width="70" height="15" rx="8" fill="#60A5FA"/>
+                <rect x="70" y="45" width="18" height="8" rx="3" fill="#1E40AF"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#2563EB" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#2563EB" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow23"><stop stop-color="#3B82F6"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Frame 24: Ready to loop -->
+        <div class="frame">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="50" fill="url(#glow24)" opacity="0.30"/>
+                <rect x="25" y="40" width="70" height="50" rx="8" fill="#3B82F6"/>
+                <rect x="25" y="40" width="70" height="15" rx="8" fill="#60A5FA"/>
+                <rect x="70" y="45" width="18" height="8" rx="3" fill="#1E40AF"/>
+                <rect x="32" y="62" width="30" height="3" rx="1.5" fill="#2563EB" opacity="0.5"/>
+                <rect x="32" y="70" width="22" height="3" rx="1.5" fill="#2563EB" opacity="0.5"/>
+                <defs>
+                    <radialGradient id="glow24"><stop stop-color="#3B82F6"/><stop offset="1" stop-color="transparent"/></radialGradient>
+                </defs>
+            </svg>
+        </div>
+    </div>
+
+    <p class="info">24 فریم SVG طراحی شده با کد - بدون هیچ تصویر خارجی</p>
+
+    <div class="controls">
+        <button onclick="toggleAnimation()">⏸ Pause</button>
+        <button onclick="showFrameCode()">📋 نمایش کد فریم‌ها</button>
+    </div>
+
+    <script>
+        let isPaused = false;
+        const container = document.querySelector('.loader-container');
+
+        function toggleAnimation() {
+            isPaused = !isPaused;
+            const frames = document.querySelectorAll('.frame');
+            frames.forEach(frame => {
+                frame.style.animationPlayState = isPaused ? 'paused' : 'running';
+            });
+            document.querySelector('.controls button').textContent = isPaused ? '▶ Play' : '⏸ Pause';
+        }
+
+        function showFrameCode() {
+            const frames = document.querySelectorAll('.frame');
+            let code = '// کد SVG هر 24 فریم:\n\n';
+            frames.forEach((frame, i) => {
+                code += `// === فریم ${i + 1} ===\n`;
+                code += frame.innerHTML.trim() + '\n\n';
+            });
+
+            const win = window.open('', '_blank');
+            win.document.write('<pre style="background:#1a1a2e;color:#00d4ff;padding:20px;font-family:monospace;white-space:pre-wrap;">' +
+                code.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>');
+        }
+    </script>
+</body>
+</html>
