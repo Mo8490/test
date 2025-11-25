@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loader Component Demo</title>
+    <link rel="stylesheet" href="loader-component.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+        }
+
+        .loaders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .loader-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .loader-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.1);
+        }
+
+        .loader-card h3 {
+            color: #00ffff;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .loader-preview {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+            margin-bottom: 20px;
+        }
+
+        .loader-card p {
+            color: #666;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .loader-card code {
+            display: block;
+            background: rgba(0, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.75rem;
+            color: #00ffff;
+            text-align: left;
+            overflow-x: auto;
+        }
+
+        .customization-section {
+            margin-top: 60px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .customization-section h2 {
+            color: #00ffff;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-group label {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .control-group input {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+        }
+
+        .preview-custom {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Loader Components</h1>
+        <p class="subtitle">Pure CSS animations - Copy and use in your project</p>
+
+        <div class="loaders-grid">
+            <!-- Ring Spinner -->
+            <div class="loader-card">
+                <h3>Ring Spinner</h3>
+                <div class="loader-preview">
+                    <div class="animated-loader ring-spinner"></div>
+                </div>
+                <p>Dual gradient rings rotating in opposite directions</p>
+                <code>&lt;div class="animated-loader ring-spinner"&gt;&lt;/div&gt;</code>
+            </div>
+
+            <!-- Pulse Circle -->
+            <div class="loader-card">
+                <h3>Pulse Circle</h3>
+                <div class="loader-preview">
+                    <div class="animated-loader pulse-circle"></div>
+                </div>
+                <p>Expanding pulse rings with fade effect</p>
+                <code>&lt;div class="animated-loader pulse-circle"&gt;&lt;/div&gt;</code>
+            </div>
+
+            <!-- Orbit Dots -->
+            <div class="loader-card">
+                <h3>Orbit Dots</h3>
+                <div class="loader-preview">
+                    <div class="animated-loader orbit-dots"></div>
+                </div>
+                <p>Two dots orbiting around a center point</p>
+                <code>&lt;div class="animated-loader orbit-dots"&gt;&lt;/div&gt;</code>
+            </div>
+
+            <!-- Morphing Shape -->
+            <div class="loader-card">
+                <h3>Morphing Shape</h3>
+                <div class="loader-preview">
+                    <div class="animated-loader morphing-shape"></div>
+                </div>
+                <p>Shape transforms between square and circle</p>
+                <code>&lt;div class="animated-loader morphing-shape"&gt;&lt;/div&gt;</code>
+            </div>
+
+            <!-- Glow Ring -->
+            <div class="loader-card">
+                <h3>Glow Ring</h3>
+                <div class="loader-preview">
+                    <div class="animated-loader glow-ring"></div>
+                </div>
+                <p>Neon glow effect with spinning arc</p>
+                <code>&lt;div class="animated-loader glow-ring"&gt;&lt;/div&gt;</code>
+            </div>
+
+            <!-- Bounce Dots -->
+            <div class="loader-card">
+                <h3>Bounce Dots</h3>
+                <div class="loader-preview">
+                    <div class="animated-loader bounce-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <p>Classic pulsing dots pattern</p>
+                <code>&lt;div class="animated-loader bounce-dots"&gt;
+  &lt;span&gt;&lt;/span&gt;
+  &lt;span&gt;&lt;/span&gt;
+  &lt;span&gt;&lt;/span&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <!-- Wave Bars -->
+            <div class="loader-card">
+                <h3>Wave Bars</h3>
+                <div class="loader-preview">
+                    <div class="animated-loader wave-bars">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <p>Audio wave visualization style</p>
+                <code>&lt;div class="animated-loader wave-bars"&gt;
+  &lt;span&gt;&lt;/span&gt; x5
+&lt;/div&gt;</code>
+            </div>
+
+            <!-- DNA Helix -->
+            <div class="loader-card">
+                <h3>DNA Helix</h3>
+                <div class="loader-preview">
+                    <div class="animated-loader dna-helix">
+                        <div class="pair"><span></span><span></span></div>
+                        <div class="pair"><span></span><span></span></div>
+                        <div class="pair"><span></span><span></span></div>
+                    </div>
+                </div>
+                <p>Double helix strand animation</p>
+                <code>&lt;div class="animated-loader dna-helix"&gt;
+  &lt;div class="pair"&gt;...&lt;/div&gt; x3
+&lt;/div&gt;</code>
+            </div>
+
+            <!-- Rotating Squares -->
+            <div class="loader-card">
+                <h3>Rotating Squares</h3>
+                <div class="loader-preview">
+                    <div class="animated-loader rotating-squares"></div>
+                </div>
+                <p>Nested squares morphing and rotating</p>
+                <code>&lt;div class="animated-loader rotating-squares"&gt;&lt;/div&gt;</code>
+            </div>
+
+            <!-- Atom -->
+            <div class="loader-card">
+                <h3>Atom</h3>
+                <div class="loader-preview">
+                    <div class="animated-loader atom">
+                        <div class="orbit"></div>
+                        <div class="orbit"></div>
+                        <div class="orbit"></div>
+                        <div class="nucleus"></div>
+                    </div>
+                </div>
+                <p>Atomic model with orbiting electrons</p>
+                <code>&lt;div class="animated-loader atom"&gt;
+  &lt;div class="orbit"&gt;&lt;/div&gt; x3
+  &lt;div class="nucleus"&gt;&lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+        </div>
+
+        <!-- Customization Section -->
+        <div class="customization-section">
+            <h2>Customize Your Loader</h2>
+            <div class="controls">
+                <div class="control-group">
+                    <label>Size (px)</label>
+                    <input type="range" id="sizeInput" min="60" max="200" value="120" oninput="updateCustomLoader()">
+                </div>
+                <div class="control-group">
+                    <label>Color 1</label>
+                    <input type="color" id="color1Input" value="#00ffff" oninput="updateCustomLoader()">
+                </div>
+                <div class="control-group">
+                    <label>Color 2</label>
+                    <input type="color" id="color2Input" value="#ff00ff" oninput="updateCustomLoader()">
+                </div>
+                <div class="control-group">
+                    <label>Speed (s)</label>
+                    <input type="range" id="speedInput" min="0.5" max="3" step="0.1" value="1.2" oninput="updateCustomLoader()">
+                </div>
+            </div>
+            <div class="preview-custom">
+                <div class="animated-loader ring-spinner" id="customLoader"></div>
+            </div>
+            <code id="customCode" style="margin-top: 20px;">.animated-loader {
+    --loader-size: 120px;
+    --loader-color-1: #00ffff;
+    --loader-color-2: #ff00ff;
+    --loader-speed: 1.2s;
+}</code>
+        </div>
+    </div>
+
+    <script>
+        function updateCustomLoader() {
+            const size = document.getElementById('sizeInput').value;
+            const color1 = document.getElementById('color1Input').value;
+            const color2 = document.getElementById('color2Input').value;
+            const speed = document.getElementById('speedInput').value;
+
+            const loader = document.getElementById('customLoader');
+            loader.style.setProperty('--loader-size', size + 'px');
+            loader.style.setProperty('--loader-color-1', color1);
+            loader.style.setProperty('--loader-color-2', color2);
+            loader.style.setProperty('--loader-speed', speed + 's');
+
+            document.getElementById('customCode').textContent = `.animated-loader {
+    --loader-size: ${size}px;
+    --loader-color-1: ${color1};
+    --loader-color-2: ${color2};
+    --loader-speed: ${speed}s;
+}`;
+        }
+    </script>
+</body>
+</html>

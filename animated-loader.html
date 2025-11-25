@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code-Based Animated Loaders</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+        }
+
+        .loaders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .loader-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .loader-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .loader-card h3 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .loader-preview {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+        }
+
+        .loader-card p {
+            color: #888;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* ========================================
+           LOADER 1: Gradient Spinner Ring
+           ======================================== */
+        .gradient-spinner {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent, #00d4ff, #7b2cbf, transparent);
+            animation: gradient-spin 1s linear infinite;
+            position: relative;
+        }
+
+        .gradient-spinner::before {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            background: #1a1a2e;
+            border-radius: 50%;
+        }
+
+        @keyframes gradient-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========================================
+           LOADER 2: Pulsing Dots
+           ======================================== */
+        .pulsing-dots {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .pulsing-dots span {
+            width: 16px;
+            height: 16px;
+            background: #00d4ff;
+            border-radius: 50%;
+            animation: pulse-dot 1.4s ease-in-out infinite;
+        }
+
+        .pulsing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+            background: #00b8e6;
+        }
+
+        .pulsing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+            background: #7b2cbf;
+        }
+
+        @keyframes pulse-dot {
+            0%, 80%, 100% {
+                transform: scale(0.6);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* ========================================
+           LOADER 3: Morphing Square
+           ======================================== */
+        .morphing-square {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+            animation: morph 2s ease-in-out infinite;
+        }
+
+        @keyframes morph {
+            0%, 100% {
+                border-radius: 0;
+                transform: rotate(0deg);
+            }
+            25% {
+                border-radius: 50% 0;
+                transform: rotate(90deg);
+            }
+            50% {
+                border-radius: 50%;
+                transform: rotate(180deg);
+            }
+            75% {
+                border-radius: 0 50%;
+                transform: rotate(270deg);
+            }
+        }
+
+        /* ========================================
+           LOADER 4: Orbiting Circles
+           ======================================== */
+        .orbiting-circles {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            animation: orbit-container 3s linear infinite;
+        }
+
+        .orbiting-circles span {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #00d4ff;
+        }
+
+        .orbiting-circles span:nth-child(1) {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: orbit-pulse 1.5s ease-in-out infinite;
+        }
+
+        .orbiting-circles span:nth-child(2) {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #7b2cbf;
+            animation: orbit-pulse 1.5s ease-in-out infinite 0.75s;
+        }
+
+        @keyframes orbit-container {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes orbit-pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(0.5); }
+        }
+
+        /* ========================================
+           LOADER 5: Wave Bars
+           ======================================== */
+        .wave-bars {
+            display: flex;
+            gap: 6px;
+            align-items: flex-end;
+            height: 60px;
+        }
+
+        .wave-bars span {
+            width: 8px;
+            background: linear-gradient(to top, #00d4ff, #7b2cbf);
+            border-radius: 4px;
+            animation: wave 1.2s ease-in-out infinite;
+        }
+
+        .wave-bars span:nth-child(1) { animation-delay: 0s; }
+        .wave-bars span:nth-child(2) { animation-delay: 0.1s; }
+        .wave-bars span:nth-child(3) { animation-delay: 0.2s; }
+        .wave-bars span:nth-child(4) { animation-delay: 0.3s; }
+        .wave-bars span:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes wave {
+            0%, 100% { height: 20px; }
+            50% { height: 60px; }
+        }
+
+        /* ========================================
+           LOADER 6: Ripple Effect
+           ======================================== */
+        .ripple-loader {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .ripple-loader span {
+            position: absolute;
+            inset: 0;
+            border: 3px solid #00d4ff;
+            border-radius: 50%;
+            animation: ripple 1.5s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+        }
+
+        .ripple-loader span:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* ========================================
+           LOADER 7: DNA Helix
+           ======================================== */
+        .dna-helix {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .dna-helix span {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            left: 50%;
+            animation: dna 2s ease-in-out infinite;
+        }
+
+        .dna-helix span:nth-child(odd) {
+            background: #00d4ff;
+        }
+
+        .dna-helix span:nth-child(even) {
+            background: #7b2cbf;
+            animation-direction: reverse;
+        }
+
+        .dna-helix span:nth-child(1), .dna-helix span:nth-child(2) { top: 10px; animation-delay: 0s; }
+        .dna-helix span:nth-child(3), .dna-helix span:nth-child(4) { top: 35px; animation-delay: 0.25s; }
+        .dna-helix span:nth-child(5), .dna-helix span:nth-child(6) { top: 60px; animation-delay: 0.5s; }
+
+        @keyframes dna {
+            0%, 100% { transform: translateX(-30px); }
+            50% { transform: translateX(18px); }
+        }
+
+        /* ========================================
+           LOADER 8: Glowing Ring
+           ======================================== */
+        .glowing-ring {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(0, 212, 255, 0.2);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .glowing-ring::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border: 4px solid transparent;
+            border-top-color: #00d4ff;
+            border-radius: 50%;
+            animation: glow-spin 1s linear infinite;
+            filter: drop-shadow(0 0 10px #00d4ff);
+        }
+
+        @keyframes glow-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========================================
+           LOADER 9: Bouncing Ball
+           ======================================== */
+        .bouncing-ball {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .bouncing-ball span {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+            border-radius: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 0.6s ease-in-out infinite alternate;
+        }
+
+        .bouncing-ball::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            animation: shadow-scale 0.6s ease-in-out infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { top: 40px; }
+            to { top: 10px; }
+        }
+
+        @keyframes shadow-scale {
+            from { transform: translateX(-50%) scale(1); opacity: 0.5; }
+            to { transform: translateX(-50%) scale(0.6); opacity: 0.2; }
+        }
+
+        /* ========================================
+           LOADER 10: Atom
+           ======================================== */
+        .atom-loader {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .atom-loader .nucleus {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #00d4ff;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px #00d4ff;
+        }
+
+        .atom-loader .orbit {
+            position: absolute;
+            inset: 0;
+            border: 2px solid transparent;
+            border-top-color: rgba(0, 212, 255, 0.5);
+            border-bottom-color: rgba(0, 212, 255, 0.5);
+            border-radius: 50%;
+            animation: atom-orbit 1.5s linear infinite;
+        }
+
+        .atom-loader .orbit:nth-child(2) {
+            transform: rotate(60deg);
+            animation-delay: -0.5s;
+        }
+
+        .atom-loader .orbit:nth-child(3) {
+            transform: rotate(120deg);
+            animation-delay: -1s;
+        }
+
+        @keyframes atom-orbit {
+            to { transform: rotate(calc(var(--base-rotation, 0deg) + 360deg)); }
+        }
+
+        .atom-loader .orbit:nth-child(2) {
+            --base-rotation: 60deg;
+        }
+
+        .atom-loader .orbit:nth-child(3) {
+            --base-rotation: 120deg;
+        }
+
+        /* ========================================
+           LOADER 11: Cube Flip
+           ======================================== */
+        .cube-flip {
+            width: 60px;
+            height: 60px;
+            perspective: 200px;
+        }
+
+        .cube-flip span {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+            animation: cube-rotate 1.5s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+
+        @keyframes cube-rotate {
+            0% { transform: rotateX(0) rotateY(0); }
+            25% { transform: rotateX(180deg) rotateY(0); }
+            50% { transform: rotateX(180deg) rotateY(180deg); }
+            75% { transform: rotateX(0) rotateY(180deg); }
+            100% { transform: rotateX(0) rotateY(360deg); }
+        }
+
+        /* ========================================
+           LOADER 12: Infinity Loop
+           ======================================== */
+        .infinity-loader {
+            width: 100px;
+            height: 50px;
+            position: relative;
+        }
+
+        .infinity-loader span {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #00d4ff;
+            border-radius: 50%;
+            animation: infinity-path 2s ease-in-out infinite;
+        }
+
+        .infinity-loader span:nth-child(2) {
+            background: #7b2cbf;
+            animation-delay: -1s;
+        }
+
+        @keyframes infinity-path {
+            0%, 100% {
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%) scale(0.5);
+            }
+            25% {
+                left: 40px;
+                top: 0;
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                left: 80px;
+                top: 50%;
+                transform: translateY(-50%) scale(0.5);
+            }
+            75% {
+                left: 40px;
+                top: 100%;
+                transform: translateY(-100%) scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Code-Based Animated Loaders</h1>
+        <p class="subtitle">Pure CSS animations - No images, fast loading, infinitely scalable</p>
+
+        <div class="loaders-grid">
+            <!-- Loader 1 -->
+            <div class="loader-card">
+                <h3>Gradient Spinner</h3>
+                <div class="loader-preview">
+                    <div class="gradient-spinner"></div>
+                </div>
+                <p>Smooth gradient ring with continuous rotation</p>
+            </div>
+
+            <!-- Loader 2 -->
+            <div class="loader-card">
+                <h3>Pulsing Dots</h3>
+                <div class="loader-preview">
+                    <div class="pulsing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <p>Classic pulsing dots with staggered animation</p>
+            </div>
+
+            <!-- Loader 3 -->
+            <div class="loader-card">
+                <h3>Morphing Square</h3>
+                <div class="loader-preview">
+                    <div class="morphing-square"></div>
+                </div>
+                <p>Shape-shifting square with rotation</p>
+            </div>
+
+            <!-- Loader 4 -->
+            <div class="loader-card">
+                <h3>Orbiting Circles</h3>
+                <div class="loader-preview">
+                    <div class="orbiting-circles">
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <p>Two circles orbiting around each other</p>
+            </div>
+
+            <!-- Loader 5 -->
+            <div class="loader-card">
+                <h3>Wave Bars</h3>
+                <div class="loader-preview">
+                    <div class="wave-bars">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <p>Audio wave style animated bars</p>
+            </div>
+
+            <!-- Loader 6 -->
+            <div class="loader-card">
+                <h3>Ripple Effect</h3>
+                <div class="loader-preview">
+                    <div class="ripple-loader">
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <p>Expanding ripple circles</p>
+            </div>
+
+            <!-- Loader 7 -->
+            <div class="loader-card">
+                <h3>DNA Helix</h3>
+                <div class="loader-preview">
+                    <div class="dna-helix">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <p>DNA double helix rotation effect</p>
+            </div>
+
+            <!-- Loader 8 -->
+            <div class="loader-card">
+                <h3>Glowing Ring</h3>
+                <div class="loader-preview">
+                    <div class="glowing-ring"></div>
+                </div>
+                <p>Neon glow effect spinner</p>
+            </div>
+
+            <!-- Loader 9 -->
+            <div class="loader-card">
+                <h3>Bouncing Ball</h3>
+                <div class="loader-preview">
+                    <div class="bouncing-ball">
+                        <span></span>
+                    </div>
+                </div>
+                <p>Physics-based bouncing animation</p>
+            </div>
+
+            <!-- Loader 10 -->
+            <div class="loader-card">
+                <h3>Atom</h3>
+                <div class="loader-preview">
+                    <div class="atom-loader">
+                        <div class="orbit"></div>
+                        <div class="orbit"></div>
+                        <div class="orbit"></div>
+                        <div class="nucleus"></div>
+                    </div>
+                </div>
+                <p>Atomic structure with orbiting electrons</p>
+            </div>
+
+            <!-- Loader 11 -->
+            <div class="loader-card">
+                <h3>Cube Flip</h3>
+                <div class="loader-preview">
+                    <div class="cube-flip">
+                        <span></span>
+                    </div>
+                </div>
+                <p>3D cube rotation effect</p>
+            </div>
+
+            <!-- Loader 12 -->
+            <div class="loader-card">
+                <h3>Infinity Loop</h3>
+                <div class="loader-preview">
+                    <div class="infinity-loader">
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <p>Figure-eight path animation</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

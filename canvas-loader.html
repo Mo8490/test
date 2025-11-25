@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Animated Loaders</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a1a;
+            color: #fff;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #00ffff;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .loaders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .loader-card {
+            background: linear-gradient(145deg, rgba(20, 20, 40, 0.8), rgba(10, 10, 30, 0.9));
+            border-radius: 24px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .loader-card h3 {
+            color: #00ffff;
+            margin-bottom: 20px;
+        }
+
+        .loader-preview {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .loader-card p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Canvas Animated Loaders</h1>
+        <p class="subtitle">High-performance Canvas 2D animations with complex effects</p>
+
+        <div class="loaders-grid">
+            <!-- Loader 1: Particle System -->
+            <div class="loader-card">
+                <h3>Particle Burst</h3>
+                <div class="loader-preview">
+                    <canvas id="particleBurst" width="150" height="150"></canvas>
+                </div>
+                <p>Exploding particle system with trails</p>
+            </div>
+
+            <!-- Loader 2: Rotating Segments -->
+            <div class="loader-card">
+                <h3>Segment Spinner</h3>
+                <div class="loader-preview">
+                    <canvas id="segmentSpinner" width="150" height="150"></canvas>
+                </div>
+                <p>Rotating colored segments with glow</p>
+            </div>
+
+            <!-- Loader 3: Matrix Rain -->
+            <div class="loader-card">
+                <h3>Matrix Ring</h3>
+                <div class="loader-preview">
+                    <canvas id="matrixRing" width="150" height="150"></canvas>
+                </div>
+                <p>Digital rain effect in circular form</p>
+            </div>
+
+            <!-- Loader 4: Spiral Galaxy -->
+            <div class="loader-card">
+                <h3>Spiral Galaxy</h3>
+                <div class="loader-preview">
+                    <canvas id="spiralGalaxy" width="150" height="150"></canvas>
+                </div>
+                <p>Spiral arms rotating with star particles</p>
+            </div>
+
+            <!-- Loader 5: Waveform -->
+            <div class="loader-card">
+                <h3>Audio Waveform</h3>
+                <div class="loader-preview">
+                    <canvas id="waveform" width="150" height="150"></canvas>
+                </div>
+                <p>Circular audio visualization effect</p>
+            </div>
+
+            <!-- Loader 6: Fractal Tree -->
+            <div class="loader-card">
+                <h3>Fractal Growth</h3>
+                <div class="loader-preview">
+                    <canvas id="fractalTree" width="150" height="150"></canvas>
+                </div>
+                <p>Growing fractal pattern animation</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // LOADER 1: Particle Burst
+        // ============================================
+        (function() {
+            const canvas = document.getElementById('particleBurst');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            const particles = [];
+            const particleCount = 60;
+
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+
+                reset() {
+                    this.x = centerX;
+                    this.y = centerY;
+                    this.angle = Math.random() * Math.PI * 2;
+                    this.speed = Math.random() * 2 + 1;
+                    this.radius = Math.random() * 3 + 1;
+                    this.life = 1;
+                    this.decay = Math.random() * 0.02 + 0.01;
+                    this.hue = Math.random() * 60 + 160; // Cyan to purple
+                }
+
+                update() {
+                    this.x += Math.cos(this.angle) * this.speed;
+                    this.y += Math.sin(this.angle) * this.speed;
+                    this.life -= this.decay;
+
+                    if (this.life <= 0) {
+                        this.reset();
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius * this.life, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${this.hue}, 100%, 60%, ${this.life})`;
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                const p = new Particle();
+                p.life = Math.random();
+                particles.push(p);
+            }
+
+            function animate() {
+                ctx.fillStyle = 'rgba(10, 10, 26, 0.2)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+
+                // Center glow
+                const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 20);
+                gradient.addColorStop(0, 'rgba(0, 255, 255, 0.8)');
+                gradient.addColorStop(1, 'rgba(0, 255, 255, 0)');
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 20, 0, Math.PI * 2);
+                ctx.fill();
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // ============================================
+        // LOADER 2: Segment Spinner
+        // ============================================
+        (function() {
+            const canvas = document.getElementById('segmentSpinner');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            let rotation = 0;
+            const segments = 12;
+            const colors = ['#00ffff', '#00e6ff', '#00ccff', '#00b3ff', '#0099ff', '#0080ff',
+                           '#6666ff', '#9933ff', '#cc00ff', '#ff00cc', '#ff0099', '#ff0066'];
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(rotation);
+
+                for (let i = 0; i < segments; i++) {
+                    const angle = (i / segments) * Math.PI * 2;
+                    const alpha = ((i + Math.floor(rotation * 3)) % segments) / segments;
+
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 50, angle, angle + Math.PI * 2 / segments - 0.1);
+                    ctx.strokeStyle = colors[i];
+                    ctx.lineWidth = 8;
+                    ctx.lineCap = 'round';
+                    ctx.globalAlpha = 0.3 + alpha * 0.7;
+
+                    // Glow effect
+                    ctx.shadowColor = colors[i];
+                    ctx.shadowBlur = 15;
+                    ctx.stroke();
+                }
+
+                ctx.restore();
+                ctx.globalAlpha = 1;
+                ctx.shadowBlur = 0;
+
+                rotation += 0.03;
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // ============================================
+        // LOADER 3: Matrix Ring
+        // ============================================
+        (function() {
+            const canvas = document.getElementById('matrixRing');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            const chars = '01アイウエオカキクケコ'.split('');
+            const streams = [];
+            const streamCount = 20;
+
+            for (let i = 0; i < streamCount; i++) {
+                streams.push({
+                    angle: (i / streamCount) * Math.PI * 2,
+                    offset: Math.random() * 50,
+                    speed: Math.random() * 0.5 + 0.5,
+                    char: chars[Math.floor(Math.random() * chars.length)]
+                });
+            }
+
+            let time = 0;
+
+            function animate() {
+                ctx.fillStyle = 'rgba(10, 10, 26, 0.15)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.font = '10px monospace';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                streams.forEach((stream, i) => {
+                    const radius = 30 + ((stream.offset + time * stream.speed) % 35);
+                    const x = centerX + Math.cos(stream.angle + time * 0.02) * radius;
+                    const y = centerY + Math.sin(stream.angle + time * 0.02) * radius;
+
+                    const alpha = 1 - (radius - 30) / 35;
+                    ctx.fillStyle = `rgba(0, 255, 255, ${alpha})`;
+
+                    if (Math.random() < 0.05) {
+                        stream.char = chars[Math.floor(Math.random() * chars.length)];
+                    }
+
+                    ctx.fillText(stream.char, x, y);
+                });
+
+                // Center core
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 15, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 255, 255, 0.3)';
+                ctx.fill();
+
+                time++;
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // ============================================
+        // LOADER 4: Spiral Galaxy
+        // ============================================
+        (function() {
+            const canvas = document.getElementById('spiralGalaxy');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            const stars = [];
+            const starCount = 200;
+
+            for (let i = 0; i < starCount; i++) {
+                const arm = Math.floor(Math.random() * 3);
+                const dist = Math.random() * 55;
+                const baseAngle = (arm / 3) * Math.PI * 2;
+                const spiralAngle = dist * 0.1;
+
+                stars.push({
+                    dist: dist,
+                    angle: baseAngle + spiralAngle + (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 2 + 0.5,
+                    brightness: Math.random() * 0.5 + 0.5,
+                    hue: Math.random() * 60 + 160
+                });
+            }
+
+            let rotation = 0;
+
+            function animate() {
+                ctx.fillStyle = 'rgba(10, 10, 26, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                stars.forEach(star => {
+                    const x = centerX + Math.cos(star.angle + rotation) * star.dist;
+                    const y = centerY + Math.sin(star.angle + rotation) * star.dist;
+
+                    ctx.beginPath();
+                    ctx.arc(x, y, star.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${star.hue}, 100%, 70%, ${star.brightness})`;
+                    ctx.fill();
+                });
+
+                // Core
+                const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 15);
+                gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+                gradient.addColorStop(0.5, 'rgba(0, 255, 255, 0.5)');
+                gradient.addColorStop(1, 'rgba(0, 255, 255, 0)');
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 15, 0, Math.PI * 2);
+                ctx.fill();
+
+                rotation += 0.01;
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // ============================================
+        // LOADER 5: Audio Waveform
+        // ============================================
+        (function() {
+            const canvas = document.getElementById('waveform');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            const bars = 64;
+            let time = 0;
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < bars; i++) {
+                    const angle = (i / bars) * Math.PI * 2;
+                    const frequency = Math.sin(time * 0.1 + i * 0.2) * 0.5 + 0.5;
+                    const height = 10 + frequency * 25;
+
+                    const innerRadius = 25;
+                    const outerRadius = innerRadius + height;
+
+                    const x1 = centerX + Math.cos(angle) * innerRadius;
+                    const y1 = centerY + Math.sin(angle) * innerRadius;
+                    const x2 = centerX + Math.cos(angle) * outerRadius;
+                    const y2 = centerY + Math.sin(angle) * outerRadius;
+
+                    const hue = 180 + frequency * 100;
+
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.strokeStyle = `hsla(${hue}, 100%, 60%, 0.8)`;
+                    ctx.lineWidth = 3;
+                    ctx.lineCap = 'round';
+                    ctx.shadowColor = `hsl(${hue}, 100%, 60%)`;
+                    ctx.shadowBlur = 10;
+                    ctx.stroke();
+                }
+
+                ctx.shadowBlur = 0;
+
+                // Center dot
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
+                ctx.fillStyle = '#00ffff';
+                ctx.fill();
+
+                time++;
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // ============================================
+        // LOADER 6: Fractal Tree
+        // ============================================
+        (function() {
+            const canvas = document.getElementById('fractalTree');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            let growth = 0;
+            let direction = 1;
+
+            function drawBranch(x, y, angle, length, depth, maxDepth) {
+                if (depth > maxDepth || length < 2) return;
+
+                const endX = x + Math.cos(angle) * length;
+                const endY = y + Math.sin(angle) * length;
+
+                const alpha = 1 - depth / maxDepth;
+                const hue = 180 + depth * 20;
+
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(endX, endY);
+                ctx.strokeStyle = `hsla(${hue}, 100%, 60%, ${alpha})`;
+                ctx.lineWidth = Math.max(1, (maxDepth - depth) * 0.8);
+                ctx.stroke();
+
+                const branchAngle = 0.5;
+                const lengthFactor = 0.7;
+
+                drawBranch(endX, endY, angle - branchAngle, length * lengthFactor, depth + 1, maxDepth);
+                drawBranch(endX, endY, angle + branchAngle, length * lengthFactor, depth + 1, maxDepth);
+            }
+
+            function animate() {
+                ctx.fillStyle = 'rgba(10, 10, 26, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                const currentDepth = Math.floor(growth);
+                const branches = 6;
+
+                for (let i = 0; i < branches; i++) {
+                    const angle = (i / branches) * Math.PI * 2 - Math.PI / 2;
+                    drawBranch(centerX, centerY, angle, 25, 0, currentDepth);
+                }
+
+                growth += 0.05 * direction;
+
+                if (growth >= 7) direction = -1;
+                if (growth <= 1) direction = 1;
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+    </script>
+</body>
+</html>
