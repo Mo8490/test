@@ -13,9 +13,6 @@
             background: #fff;
             margin: 0;
         }
-        canvas {
-            display: block;
-        }
     </style>
 </head>
 <body>
@@ -25,103 +22,116 @@
     const canvas = document.getElementById('wallet');
     const ctx = canvas.getContext('2d');
 
-    // مرکز
-    const cx = 60;
-    const cy = 60;
+    // ابعاد دقیق از فریم اصلی
+    const cx = 60;  // مرکز X
+    const cy = 60;  // مرکز Y
 
-    // ابعاد کیف پول
-    const width = 58;
-    const height = 68;
-    const cornerRadius = 14;
-    const notchRadius = 14;
+    // شکل C - ابعاد دقیق
+    const left = 25;        // لبه چپ
+    const right = 95;       // لبه راست
+    const top = 22;         // لبه بالا
+    const bottom = 98;      // لبه پایین
+    const cornerR = 16;     // شعاع گوشه‌ها
+    const notchR = 15;      // شعاع بریدگی سکه
+    const notchX = right;   // مرکز X بریدگی (لبه راست)
+    const notchY = cy;      // مرکز Y بریدگی (وسط)
 
-    // سایه
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.15)';
-    ctx.shadowBlur = 8;
+    // === رسم سایه ===
+    ctx.shadowColor = 'rgba(30, 60, 120, 0.25)';
+    ctx.shadowBlur = 12;
     ctx.shadowOffsetX = 2;
-    ctx.shadowOffsetY = 4;
+    ctx.shadowOffsetY = 6;
 
-    // رسم شکل کیف پول (مستطیل با گوشه گرد + بریدگی نیم‌دایره)
+    // === رسم شکل C ===
     ctx.beginPath();
 
-    // شروع از بالا چپ
-    ctx.moveTo(cx - width/2 + cornerRadius, cy - height/2);
+    // شروع از گوشه بالا چپ (بعد از منحنی)
+    ctx.moveTo(left + cornerR, top);
 
-    // خط بالا
-    ctx.lineTo(cx + width/2 - cornerRadius, cy - height/2);
+    // لبه بالا → گوشه بالا راست
+    ctx.lineTo(right - cornerR, top);
+    ctx.arcTo(right, top, right, top + cornerR, cornerR);
 
-    // گوشه بالا راست
-    ctx.arcTo(cx + width/2, cy - height/2, cx + width/2, cy - height/2 + cornerRadius, cornerRadius);
+    // لبه راست بالا → تا بریدگی
+    ctx.lineTo(right, notchY - notchR);
 
-    // خط راست تا بریدگی
-    ctx.lineTo(cx + width/2, cy - notchRadius);
+    // بریدگی نیم‌دایره (به سمت چپ/داخل)
+    ctx.arc(notchX, notchY, notchR, -Math.PI/2, Math.PI/2, true);
 
-    // بریدگی نیم‌دایره (به سمت داخل)
-    ctx.arc(cx + width/2, cy, notchRadius, -Math.PI/2, Math.PI/2, true);
+    // لبه راست پایین → گوشه پایین راست
+    ctx.lineTo(right, bottom - cornerR);
+    ctx.arcTo(right, bottom, right - cornerR, bottom, cornerR);
 
-    // خط راست بعد از بریدگی
-    ctx.lineTo(cx + width/2, cy + height/2 - cornerRadius);
+    // لبه پایین → گوشه پایین چپ
+    ctx.lineTo(left + cornerR, bottom);
+    ctx.arcTo(left, bottom, left, bottom - cornerR, cornerR);
 
-    // گوشه پایین راست
-    ctx.arcTo(cx + width/2, cy + height/2, cx + width/2 - cornerRadius, cy + height/2, cornerRadius);
-
-    // خط پایین
-    ctx.lineTo(cx - width/2 + cornerRadius, cy + height/2);
-
-    // گوشه پایین چپ
-    ctx.arcTo(cx - width/2, cy + height/2, cx - width/2, cy + height/2 - cornerRadius, cornerRadius);
-
-    // خط چپ
-    ctx.lineTo(cx - width/2, cy - height/2 + cornerRadius);
-
-    // گوشه بالا چپ
-    ctx.arcTo(cx - width/2, cy - height/2, cx - width/2 + cornerRadius, cy - height/2, cornerRadius);
+    // لبه چپ → گوشه بالا چپ
+    ctx.lineTo(left, top + cornerR);
+    ctx.arcTo(left, top, left + cornerR, top, cornerR);
 
     ctx.closePath();
 
-    // گرادیانت آبی
-    const blueGrad = ctx.createLinearGradient(cx - width/2, cy - height/2, cx + width/2, cy + height/2);
-    blueGrad.addColorStop(0, '#5294F5');
-    blueGrad.addColorStop(0.5, '#4285F4');
-    blueGrad.addColorStop(1, '#3275E4');
+    // گرادیانت آبی (از بالا-چپ روشن به پایین-راست تیره)
+    const grad = ctx.createLinearGradient(left, top, right, bottom);
+    grad.addColorStop(0, '#5A9CF8');    // آبی روشن
+    grad.addColorStop(0.4, '#4A8DF5');  // آبی متوسط
+    grad.addColorStop(1, '#3B7DE8');    // آبی تیره
 
-    ctx.fillStyle = blueGrad;
+    ctx.fillStyle = grad;
     ctx.fill();
 
-    // هایلایت گوشه بالا چپ
+    // === هایلایت گوشه بالا چپ ===
     ctx.shadowColor = 'transparent';
+
     ctx.beginPath();
-    ctx.moveTo(cx - width/2 + cornerRadius - 2, cy - height/2 + 4);
-    ctx.lineTo(cx - width/2 + cornerRadius + 14, cy - height/2 + 4);
-    ctx.lineTo(cx - width/2 + cornerRadius + 14, cy - height/2 + 16);
-    ctx.lineTo(cx - width/2 + 6, cy - height/2 + 16);
-    ctx.quadraticCurveTo(cx - width/2 + 4, cy - height/2 + 10, cx - width/2 + cornerRadius - 2, cy - height/2 + 4);
+    ctx.moveTo(left + 4, top + cornerR);
+    ctx.lineTo(left + 4, top + 6);
+    ctx.arcTo(left + 4, top + 4, left + 6, top + 4, 2);
+    ctx.lineTo(left + cornerR + 12, top + 4);
+    ctx.lineTo(left + cornerR + 12, top + 6);
+    ctx.lineTo(left + cornerR + 8, top + 18);
+    ctx.lineTo(left + 8, top + 18);
+    ctx.arcTo(left + 4, top + 14, left + 4, top + cornerR, 6);
     ctx.closePath();
 
-    ctx.fillStyle = 'rgba(130, 190, 255, 0.55)';
+    const highlightGrad = ctx.createLinearGradient(left, top, left + 30, top + 25);
+    highlightGrad.addColorStop(0, 'rgba(160, 200, 255, 0.7)');
+    highlightGrad.addColorStop(1, 'rgba(100, 160, 255, 0)');
+
+    ctx.fillStyle = highlightGrad;
     ctx.fill();
 
-    // سکه
-    ctx.shadowColor = 'rgba(245, 180, 0, 0.4)';
-    ctx.shadowBlur = 5;
+    // === سکه ===
+    const coinX = notchX;
+    const coinY = notchY;
+    const coinR = 12;
+
+    // سایه سکه
+    ctx.shadowColor = 'rgba(200, 150, 0, 0.35)';
+    ctx.shadowBlur = 6;
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 2;
 
-    const coinGrad = ctx.createRadialGradient(cx + width/2 - 3, cy - 3, 0, cx + width/2, cy, 12);
-    coinGrad.addColorStop(0, '#FFE55C');
-    coinGrad.addColorStop(0.6, '#FBBC05');
-    coinGrad.addColorStop(1, '#E5A800');
+    // گرادیانت سکه
+    const coinGrad = ctx.createRadialGradient(
+        coinX - 3, coinY - 3, 0,
+        coinX, coinY, coinR
+    );
+    coinGrad.addColorStop(0, '#FFE566');   // زرد روشن
+    coinGrad.addColorStop(0.5, '#FFCC33'); // نارنجی-زرد
+    coinGrad.addColorStop(1, '#F5A623');   // نارنجی
 
     ctx.beginPath();
-    ctx.arc(cx + width/2, cy, 11, 0, Math.PI * 2);
+    ctx.arc(coinX, coinY, coinR, 0, Math.PI * 2);
     ctx.fillStyle = coinGrad;
     ctx.fill();
 
     // هایلایت سکه
     ctx.shadowColor = 'transparent';
     ctx.beginPath();
-    ctx.ellipse(cx + width/2 - 3, cy - 3, 4, 3, -0.4, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+    ctx.ellipse(coinX - 4, coinY - 4, 5, 3.5, -0.5, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
     ctx.fill();
     </script>
 </body>
