@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exact Wallet Loader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #0a0a1a;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #fff;
+            gap: 30px;
+        }
+
+        h1 {
+            color: #00d4ff;
+            font-size: 1.5rem;
+        }
+
+        .upload-area {
+            border: 2px dashed #00d4ff;
+            border-radius: 12px;
+            padding: 30px 50px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .upload-area:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .upload-area input {
+            display: none;
+        }
+
+        .loader-container {
+            width: 120px;
+            height: 120px;
+            display: none;
+        }
+
+        .loader-container.active {
+            display: block;
+        }
+
+        #loaderImage {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .controls {
+            display: none;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .controls.active {
+            display: flex;
+        }
+
+        .controls button {
+            background: #00d4ff;
+            color: #0a0a1a;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .controls button:hover {
+            background: #00b8e6;
+        }
+
+        .info {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .export-section {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 800px;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .export-section.active {
+            display: flex;
+        }
+
+        .export-section h2 {
+            color: #00d4ff;
+        }
+
+        .export-section textarea {
+            width: 100%;
+            height: 300px;
+            background: #1a1a2e;
+            color: #00d4ff;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .export-section button {
+            background: #00d4ff;
+            color: #0a0a1a;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            align-self: flex-start;
+        }
+    </style>
+</head>
+<body>
+    <h1>Exact Lottie to CSS Converter</h1>
+
+    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+        <input type="file" id="fileInput" accept=".json">
+        📁 فایل Lottie JSON رو آپلود کن
+    </div>
+
+    <div class="loader-container" id="loaderContainer">
+        <img id="loaderImage" src="" alt="Loader">
+    </div>
+
+    <div class="controls" id="controls">
+        <button onclick="togglePlay()">⏸ Pause</button>
+        <span class="info">Frame: <span id="frameNum">0</span> / <span id="totalFrames">0</span></span>
+        <span class="info">FPS: <span id="fpsDisplay">60</span></span>
+    </div>
+
+    <div class="export-section" id="exportSection">
+        <h2>کد CSS + HTML آماده استفاده:</h2>
+        <textarea id="exportCode" readonly></textarea>
+        <button onclick="copyCode()">📋 کپی کد</button>
+        <button onclick="downloadHTML()">💾 دانلود فایل HTML</button>
+    </div>
+
+    <script>
+        let frames = [];
+        let currentFrame = 0;
+        let isPlaying = false;
+        let animationInterval = null;
+        let fps = 60;
+        let lottieData = null;
+
+        document.getElementById('fileInput').addEventListener('change', handleFile);
+
+        function handleFile(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    lottieData = JSON.parse(event.target.result);
+                    extractFrames();
+                } catch (err) {
+                    alert('Error parsing JSON: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function extractFrames() {
+            if (!lottieData || !lottieData.assets) {
+                alert('No assets found in Lottie file');
+                return;
+            }
+
+            // Extract all image frames
+            frames = [];
+            lottieData.assets.forEach(asset => {
+                if (asset.p && asset.p.startsWith('data:image')) {
+                    frames.push(asset.p);
+                }
+            });
+
+            if (frames.length === 0) {
+                alert('No image frames found');
+                return;
+            }
+
+            fps = lottieData.fr || 60;
+
+            document.getElementById('totalFrames').textContent = frames.length;
+            document.getElementById('fpsDisplay').textContent = fps;
+            document.getElementById('loaderContainer').classList.add('active');
+            document.getElementById('controls').classList.add('active');
+            document.getElementById('exportSection').classList.add('active');
+            document.querySelector('.upload-area').style.display = 'none';
+
+            generateExportCode();
+            startAnimation();
+        }
+
+        function startAnimation() {
+            isPlaying = true;
+            const frameInterval = 1000 / fps;
+
+            // Each image shows for ~2 frames based on Lottie structure
+            const displayTime = frameInterval * 1.4; // Adjusted for smooth playback
+
+            animationInterval = setInterval(() => {
+                if (isPlaying) {
+                    document.getElementById('loaderImage').src = frames[currentFrame];
+                    document.getElementById('frameNum').textContent = currentFrame;
+                    currentFrame = (currentFrame + 1) % frames.length;
+                }
+            }, displayTime);
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            document.querySelector('.controls button').textContent = isPlaying ? '⏸ Pause' : '▶ Play';
+        }
+
+        function generateExportCode() {
+            const duration = (frames.length / fps * 1.4).toFixed(2);
+
+            let code = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Loader</title>
+    <style>
+        .wallet-loader {
+            width: 120px;
+            height: 120px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            animation: wallet-frames ${duration}s steps(1) infinite;
+        }
+
+        @keyframes wallet-frames {
+`;
+
+            const stepPercent = 100 / frames.length;
+            frames.forEach((frame, index) => {
+                const percent = (index * stepPercent).toFixed(4);
+                code += `            ${percent}% { background-image: url("${frame}"); }\n`;
+            });
+
+            code += `        }
+    </style>
+</head>
+<body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0a0a1a; margin: 0;">
+    <div class="wallet-loader"></div>
+</body>
+</html>`;
+
+            document.getElementById('exportCode').value = code;
+        }
+
+        function copyCode() {
+            const textarea = document.getElementById('exportCode');
+            textarea.select();
+            document.execCommand('copy');
+            alert('کد کپی شد!');
+        }
+
+        function downloadHTML() {
+            const code = document.getElementById('exportCode').value;
+            const blob = new Blob([code], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'wallet-loader-exact.html';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
