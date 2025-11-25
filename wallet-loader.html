@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallet Loader - Pure CSS/SVG Animation</title>
+    <title>Wallet Loader - Exact Lottie Recreation</title>
     <style>
         * {
             margin: 0;
@@ -17,7 +17,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #0f0f1a 100%);
+            background: #0a0a12;
             font-family: system-ui, -apple-system, sans-serif;
             gap: 40px;
         }
@@ -25,42 +25,37 @@
         h1 {
             color: #fff;
             font-weight: 300;
-            font-size: 24px;
+            font-size: 20px;
         }
 
         .demo-row {
             display: flex;
-            gap: 60px;
+            gap: 40px;
             align-items: center;
         }
 
         .demo-box {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 40px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 30px;
             text-align: center;
         }
 
         .demo-box p {
-            color: #666;
-            margin-top: 20px;
-            font-size: 13px;
+            color: #555;
+            margin-top: 15px;
+            font-size: 12px;
         }
 
-        /* ========================================
-           WALLET LOADER - PURE CSS/SVG
-           بدون هیچ تصویر خارجی
-           ======================================== */
+        /* ============================================
+           WALLET LOADER - EXACT LOTTIE RECREATION
+           بازسازی دقیق فریم به فریم
+           ============================================ */
 
         .wallet-loader {
             --size: 120px;
-            --duration: 1.4s;
-            --primary: #3B82F6;
-            --primary-dark: #1E40AF;
-            --primary-light: #60A5FA;
-            --coin: #F59E0B;
-            --coin-light: #FBBF24;
+            --duration: 2.5s;
             width: var(--size);
             height: var(--size);
             position: relative;
@@ -72,432 +67,394 @@
             overflow: visible;
         }
 
-        /* نیمه چپ کیف پول */
-        .wallet-half-left {
+        /* === نیمه چپ === */
+        .half-left {
             transform-origin: 60px 60px;
-            animation: splitLeft var(--duration) ease-in-out infinite;
+            animation: leftHalfAnim var(--duration) ease-in-out infinite;
         }
 
-        /* نیمه راست کیف پول */
-        .wallet-half-right {
+        /* === نیمه راست === */
+        .half-right {
             transform-origin: 60px 60px;
-            animation: splitRight var(--duration) ease-in-out infinite;
+            animation: rightHalfAnim var(--duration) ease-in-out infinite;
         }
 
-        /* سکه */
-        .wallet-coin {
-            animation: coinPop var(--duration) ease-in-out infinite;
-            transform-origin: 60px 60px;
+        /* === پوشش آبی نیمه چپ === */
+        .blue-overlay-left {
+            animation: blueOverlayLeftAnim var(--duration) ease-in-out infinite;
         }
 
-        /* اثر رنگین‌کمانی چپ */
-        .rainbow-left {
+        /* === پوشش آبی نیمه راست === */
+        .blue-overlay-right {
+            animation: blueOverlayRightAnim var(--duration) ease-in-out infinite;
+        }
+
+        /* === خط صورتی وسط === */
+        .center-line {
             opacity: 0;
-            animation: rainbowLeftAnim var(--duration) ease-in-out infinite;
+            animation: centerLineAnim var(--duration) ease-in-out infinite;
+        }
+
+        /* === سکه === */
+        .coin-group {
             transform-origin: 60px 60px;
+            animation: coinAnim var(--duration) ease-in-out infinite;
         }
 
-        /* اثر رنگین‌کمانی راست */
-        .rainbow-right {
-            opacity: 0;
-            animation: rainbowRightAnim var(--duration) ease-in-out infinite;
-            transform-origin: 60px 60px;
-        }
+        /* ============================================
+           KEYFRAMES - دقیقاً مثل انیمیشن Lottie
+           ============================================ */
 
-        /* خط نورانی وسط */
-        .center-glow {
-            opacity: 0;
-            animation: centerGlowAnim var(--duration) ease-in-out infinite;
-        }
+        /*
+        تایم‌لاین انیمیشن:
+        0-5%    : حالت عادی (آبی + سکه)
+        5-15%   : رنگین‌کمان ظاهر میشه
+        15-25%  : دو نیمه از هم جدا میشن
+        25-35%  : نیمه راست می‌چرخه (180 درجه)
+        35-50%  : دو نیمه به هم نزدیک میشن، رنگ آبی برمیگرده
+        50-60%  : دوباره از هم جدا میشن با خط صورتی
+        60-75%  : به هم می‌چسبن
+        75-100% : حالت عادی
+        */
 
-        /* ذرات درخشان */
-        .sparkle-particle {
-            opacity: 0;
-            animation: sparkleAnim var(--duration) ease-out infinite;
-        }
-
-        .sparkle-particle:nth-child(1) { animation-delay: 0.1s; }
-        .sparkle-particle:nth-child(2) { animation-delay: 0.15s; }
-        .sparkle-particle:nth-child(3) { animation-delay: 0.2s; }
-        .sparkle-particle:nth-child(4) { animation-delay: 0.25s; }
-
-        /* ========== KEYFRAMES ========== */
-
-        @keyframes splitLeft {
-            0%, 10% {
-                transform: translateX(0) scale(1);
-            }
-            25%, 55% {
-                transform: translateX(-12px) scale(1.02);
-            }
-            70%, 100% {
-                transform: translateX(0) scale(1);
-            }
-        }
-
-        @keyframes splitRight {
-            0%, 10% {
-                transform: translateX(0) scale(1);
-            }
-            25%, 55% {
-                transform: translateX(12px) scale(1.02);
-            }
-            70%, 100% {
-                transform: translateX(0) scale(1);
-            }
-        }
-
-        @keyframes coinPop {
-            0%, 10% {
-                transform: scale(1) translateY(0);
-            }
-            25%, 35% {
-                transform: scale(1.15) translateY(-3px);
-            }
-            55% {
-                transform: scale(1.1) translateY(-2px);
-            }
-            70%, 100% {
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        @keyframes rainbowLeftAnim {
-            0%, 10% {
-                opacity: 0;
+        @keyframes leftHalfAnim {
+            0%, 5% {
                 transform: translateX(0);
             }
-            20%, 60% {
+            18%, 25% {
+                transform: translateX(-20px);
+            }
+            35%, 50% {
+                transform: translateX(0);
+            }
+            55%, 62% {
+                transform: translateX(-15px);
+            }
+            75%, 100% {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes rightHalfAnim {
+            0%, 5% {
+                transform: translateX(0) rotate(0deg);
+            }
+            18%, 22% {
+                transform: translateX(20px) rotate(0deg);
+            }
+            28% {
+                transform: translateX(15px) rotate(90deg);
+            }
+            35% {
+                transform: translateX(5px) rotate(180deg);
+            }
+            42%, 50% {
+                transform: translateX(0) rotate(0deg);
+            }
+            55%, 62% {
+                transform: translateX(15px) rotate(0deg);
+            }
+            75%, 100% {
+                transform: translateX(0) rotate(0deg);
+            }
+        }
+
+        @keyframes blueOverlayLeftAnim {
+            0%, 3% {
                 opacity: 1;
-                transform: translateX(-10px);
+            }
+            8%, 32% {
+                opacity: 0;
+            }
+            42%, 100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes blueOverlayRightAnim {
+            0%, 3% {
+                opacity: 1;
+            }
+            8%, 38% {
+                opacity: 0;
+            }
+            48%, 100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes centerLineAnim {
+            0%, 50% {
+                opacity: 0;
+            }
+            55%, 68% {
+                opacity: 1;
             }
             75%, 100% {
                 opacity: 0;
-                transform: translateX(0);
             }
         }
 
-        @keyframes rainbowRightAnim {
-            0%, 10% {
-                opacity: 0;
-                transform: translateX(0);
-            }
-            20%, 60% {
-                opacity: 1;
-                transform: translateX(10px);
-            }
-            75%, 100% {
-                opacity: 0;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes centerGlowAnim {
-            0%, 15% {
-                opacity: 0;
-            }
-            25%, 55% {
-                opacity: 1;
-            }
-            70%, 100% {
-                opacity: 0;
-            }
-        }
-
-        @keyframes sparkleAnim {
-            0%, 15% {
-                opacity: 0;
-                transform: scale(0);
-            }
-            25% {
-                opacity: 1;
+        @keyframes coinAnim {
+            0%, 5% {
                 transform: scale(1);
+                opacity: 1;
             }
-            50% {
-                opacity: 0.8;
-                transform: scale(1.2);
-            }
-            65%, 100% {
-                opacity: 0;
+            12%, 42% {
                 transform: scale(0);
+                opacity: 0;
+            }
+            52%, 100% {
+                transform: scale(1);
+                opacity: 1;
             }
         }
 
-        /* ========== SIZE VARIANTS ========== */
+        /* === سایزها === */
+        .wallet-loader.small { --size: 60px; }
+        .wallet-loader.medium { --size: 120px; }
+        .wallet-loader.large { --size: 180px; }
 
-        .wallet-loader.small {
-            --size: 60px;
-        }
-
-        .wallet-loader.large {
-            --size: 180px;
-        }
-
-        /* ========== SPEED VARIANTS ========== */
-
-        .wallet-loader.fast {
-            --duration: 0.9s;
-        }
-
-        .wallet-loader.slow {
-            --duration: 2s;
-        }
+        /* === سرعت === */
+        .wallet-loader.fast { --duration: 1.5s; }
+        .wallet-loader.slow { --duration: 3.5s; }
     </style>
 </head>
 <body>
-    <h1>Wallet Loader Animation - Pure CSS/SVG</h1>
+    <h1>Wallet Loader - Exact Lottie Recreation (Pure Code)</h1>
 
     <div class="demo-row">
         <!-- سایز کوچک -->
         <div class="demo-box">
             <div class="wallet-loader small">
-                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                        <!-- گرادیانت اصلی کیف پول -->
-                        <linearGradient id="walletGradS" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#60A5FA"/>
-                            <stop offset="50%" style="stop-color:#3B82F6"/>
-                            <stop offset="100%" style="stop-color:#1E40AF"/>
+                        <!-- گرادیانت آبی -->
+                        <linearGradient id="blueGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#6BA3F7"/>
+                            <stop offset="50%" stop-color="#4A8AF5"/>
+                            <stop offset="100%" stop-color="#3070E0"/>
+                        </linearGradient>
+                        <!-- گرادیانت هایلایت -->
+                        <linearGradient id="highlightGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#9ECAFF" stop-opacity="0.9"/>
+                            <stop offset="100%" stop-color="#6BA3F7" stop-opacity="0"/>
+                        </linearGradient>
+                        <!-- گرادیانت رنگین‌کمان -->
+                        <linearGradient id="rainbowGrad1" x1="0%" y1="100%" x2="0%" y2="0%">
+                            <stop offset="0%" stop-color="#FF2D6A"/>
+                            <stop offset="17%" stop-color="#FF6B2D"/>
+                            <stop offset="33%" stop-color="#FFD02D"/>
+                            <stop offset="50%" stop-color="#2DFF6B"/>
+                            <stop offset="67%" stop-color="#2DD0FF"/>
+                            <stop offset="83%" stop-color="#6B2DFF"/>
+                            <stop offset="100%" stop-color="#FF2DD0"/>
                         </linearGradient>
                         <!-- گرادیانت سکه -->
-                        <linearGradient id="coinGradS" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#FBBF24"/>
-                            <stop offset="100%" style="stop-color:#F59E0B"/>
+                        <linearGradient id="coinGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#FFD966"/>
+                            <stop offset="100%" stop-color="#F5A623"/>
                         </linearGradient>
-                        <!-- گرادیانت رنگین‌کمانی -->
-                        <linearGradient id="rainbowGradLS" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#FF6B9D"/>
-                            <stop offset="25%" style="stop-color:#C44AFF"/>
-                            <stop offset="50%" style="stop-color:#44D7FF"/>
-                            <stop offset="75%" style="stop-color:#44FF88"/>
-                            <stop offset="100%" style="stop-color:#FFDD44"/>
-                        </linearGradient>
-                        <linearGradient id="rainbowGradRS" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#44FF88"/>
-                            <stop offset="25%" style="stop-color:#44D7FF"/>
-                            <stop offset="50%" style="stop-color:#C44AFF"/>
-                            <stop offset="75%" style="stop-color:#FF6B9D"/>
-                            <stop offset="100%" style="stop-color:#FFDD44"/>
-                        </linearGradient>
-                        <!-- فیلتر سایه -->
-                        <filter id="shadowS" x="-20%" y="-20%" width="140%" height="140%">
-                            <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#3B82F6" flood-opacity="0.3"/>
+                        <!-- سایه -->
+                        <filter id="shadow1" x="-50%" y="-50%" width="200%" height="200%">
+                            <feDropShadow dx="1" dy="3" stdDeviation="3" flood-color="#000" flood-opacity="0.25"/>
                         </filter>
-                        <!-- فیلتر درخشش -->
-                        <filter id="glowS" x="-50%" y="-50%" width="200%" height="200%">
-                            <feGaussianBlur stdDeviation="3" result="blur"/>
-                            <feMerge>
-                                <feMergeNode in="blur"/>
-                                <feMergeNode in="SourceGraphic"/>
-                            </feMerge>
+                        <!-- بلور -->
+                        <filter id="blur1" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="2"/>
                         </filter>
                     </defs>
 
-                    <!-- نیمه چپ کیف پول -->
-                    <g class="wallet-half-left" filter="url(#shadowS)">
-                        <path d="M30 40 C30 34 34 30 40 30 L58 30 L58 90 L40 90 C34 90 30 86 30 80 Z" fill="url(#walletGradS)"/>
-                        <path d="M30 45 C30 37 36 32 44 32 L55 32 L55 36 L44 36 C40 36 34 40 34 46 L34 74 C34 80 40 84 44 84 L55 84 L55 88 L44 88 C36 88 30 82 30 74 Z" fill="rgba(255,255,255,0.1)"/>
+                    <!-- نیمه چپ -->
+                    <g class="half-left">
+                        <!-- لایه رنگین‌کمان -->
+                        <path d="M26 36 C26 27 33 22 42 22 L60 22 L60 98 L42 98 C33 98 26 93 26 84 Z"
+                              fill="url(#rainbowGrad1)" filter="url(#shadow1)"/>
+                        <!-- لایه آبی (روی رنگین‌کمان) -->
+                        <g class="blue-overlay-left">
+                            <path d="M26 36 C26 27 33 22 42 22 L60 22 L60 98 L42 98 C33 98 26 93 26 84 Z"
+                                  fill="url(#blueGrad1)" filter="url(#shadow1)"/>
+                            <!-- هایلایت -->
+                            <path d="M29 40 C29 33 34 28 42 28 L48 28 L48 38 L42 38 C38 38 34 42 34 48 L34 55 L29 55 Z"
+                                  fill="url(#highlightGrad1)"/>
+                        </g>
                     </g>
 
-                    <!-- نیمه راست کیف پول -->
-                    <g class="wallet-half-right" filter="url(#shadowS)">
-                        <path d="M62 30 L80 30 C86 30 90 34 90 40 L90 80 C90 86 86 90 80 90 L62 90 Z" fill="url(#walletGradS)"/>
-                        <!-- بریدگی نیم‌دایره -->
-                        <circle cx="62" cy="60" r="12" fill="#0f0f1a"/>
-                        <path d="M65 32 L76 32 C82 32 86 36 86 42 L86 78 C86 84 82 88 76 88 L65 88 L65 84 L74 84 C78 84 82 80 82 76 L82 44 C82 40 78 36 74 36 L65 36 Z" fill="rgba(255,255,255,0.1)"/>
+                    <!-- نیمه راست -->
+                    <g class="half-right">
+                        <!-- لایه رنگین‌کمان -->
+                        <path d="M60 22 L78 22 C87 22 94 27 94 36 L94 84 C94 93 87 98 78 98 L60 98 Z"
+                              fill="url(#rainbowGrad1)" filter="url(#shadow1)"/>
+                        <circle cx="60" cy="60" r="15" fill="#0a0a12"/>
+                        <!-- لایه آبی -->
+                        <g class="blue-overlay-right">
+                            <path d="M60 22 L78 22 C87 22 94 27 94 36 L94 84 C94 93 87 98 78 98 L60 98 Z"
+                                  fill="url(#blueGrad1)" filter="url(#shadow1)"/>
+                            <circle cx="60" cy="60" r="15" fill="#0a0a12"/>
+                        </g>
                     </g>
 
-                    <!-- اثر رنگین‌کمانی چپ -->
-                    <g class="rainbow-left" filter="url(#glowS)">
-                        <path d="M32 42 C32 36 36 32 42 32 L56 32 L56 88 L42 88 C36 88 32 84 32 78 Z" fill="url(#rainbowGradLS)" opacity="0.6"/>
-                    </g>
-
-                    <!-- اثر رنگین‌کمانی راست -->
-                    <g class="rainbow-right" filter="url(#glowS)">
-                        <path d="M64 32 L78 32 C84 32 88 36 88 42 L88 78 C88 84 84 88 78 88 L64 88 Z" fill="url(#rainbowGradRS)" opacity="0.6"/>
-                    </g>
-
-                    <!-- خط نورانی وسط -->
-                    <g class="center-glow">
-                        <line x1="60" y1="35" x2="60" y2="85" stroke="#FF6B9D" stroke-width="2" opacity="0.8"/>
-                        <line x1="60" y1="35" x2="60" y2="85" stroke="#fff" stroke-width="1" opacity="0.5"/>
-                    </g>
+                    <!-- خط صورتی وسط -->
+                    <line class="center-line" x1="60" y1="26" x2="60" y2="94"
+                          stroke="#FF2D6A" stroke-width="2.5" stroke-linecap="round" filter="url(#blur1)"/>
+                    <line class="center-line" x1="60" y1="26" x2="60" y2="94"
+                          stroke="#FF6BA3" stroke-width="1.5" stroke-linecap="round"/>
 
                     <!-- سکه -->
-                    <g class="wallet-coin">
-                        <circle cx="60" cy="60" r="10" fill="url(#coinGradS)" filter="url(#shadowS)"/>
-                        <circle cx="58" cy="58" r="4" fill="rgba(255,255,255,0.3)"/>
+                    <g class="coin-group">
+                        <circle cx="60" cy="60" r="12" fill="url(#coinGrad1)" filter="url(#shadow1)"/>
+                        <ellipse cx="56" cy="56" rx="5" ry="4" fill="rgba(255,255,255,0.45)"/>
                     </g>
-
-                    <!-- ذرات درخشان -->
-                    <circle class="sparkle-particle" cx="45" cy="45" r="2" fill="#fff"/>
-                    <circle class="sparkle-particle" cx="75" cy="45" r="2" fill="#fff"/>
-                    <circle class="sparkle-particle" cx="45" cy="75" r="2" fill="#fff"/>
-                    <circle class="sparkle-particle" cx="75" cy="75" r="2" fill="#fff"/>
                 </svg>
             </div>
-            <p>60px - Small</p>
+            <p>60px</p>
         </div>
 
-        <!-- سایز متوسط (پیش‌فرض) -->
+        <!-- سایز متوسط -->
         <div class="demo-box">
             <div class="wallet-loader">
-                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                        <linearGradient id="walletGradM" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#60A5FA"/>
-                            <stop offset="50%" style="stop-color:#3B82F6"/>
-                            <stop offset="100%" style="stop-color:#1E40AF"/>
+                        <linearGradient id="blueGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#6BA3F7"/>
+                            <stop offset="50%" stop-color="#4A8AF5"/>
+                            <stop offset="100%" stop-color="#3070E0"/>
                         </linearGradient>
-                        <linearGradient id="coinGradM" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#FBBF24"/>
-                            <stop offset="100%" style="stop-color:#F59E0B"/>
+                        <linearGradient id="highlightGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#9ECAFF" stop-opacity="0.9"/>
+                            <stop offset="100%" stop-color="#6BA3F7" stop-opacity="0"/>
                         </linearGradient>
-                        <linearGradient id="rainbowGradLM" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#FF6B9D"/>
-                            <stop offset="25%" style="stop-color:#C44AFF"/>
-                            <stop offset="50%" style="stop-color:#44D7FF"/>
-                            <stop offset="75%" style="stop-color:#44FF88"/>
-                            <stop offset="100%" style="stop-color:#FFDD44"/>
+                        <linearGradient id="rainbowGrad2" x1="0%" y1="100%" x2="0%" y2="0%">
+                            <stop offset="0%" stop-color="#FF2D6A"/>
+                            <stop offset="17%" stop-color="#FF6B2D"/>
+                            <stop offset="33%" stop-color="#FFD02D"/>
+                            <stop offset="50%" stop-color="#2DFF6B"/>
+                            <stop offset="67%" stop-color="#2DD0FF"/>
+                            <stop offset="83%" stop-color="#6B2DFF"/>
+                            <stop offset="100%" stop-color="#FF2DD0"/>
                         </linearGradient>
-                        <linearGradient id="rainbowGradRM" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#44FF88"/>
-                            <stop offset="25%" style="stop-color:#44D7FF"/>
-                            <stop offset="50%" style="stop-color:#C44AFF"/>
-                            <stop offset="75%" style="stop-color:#FF6B9D"/>
-                            <stop offset="100%" style="stop-color:#FFDD44"/>
+                        <linearGradient id="coinGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#FFD966"/>
+                            <stop offset="100%" stop-color="#F5A623"/>
                         </linearGradient>
-                        <filter id="shadowM" x="-20%" y="-20%" width="140%" height="140%">
-                            <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#3B82F6" flood-opacity="0.3"/>
+                        <filter id="shadow2" x="-50%" y="-50%" width="200%" height="200%">
+                            <feDropShadow dx="1" dy="3" stdDeviation="3" flood-color="#000" flood-opacity="0.25"/>
                         </filter>
-                        <filter id="glowM" x="-50%" y="-50%" width="200%" height="200%">
-                            <feGaussianBlur stdDeviation="3" result="blur"/>
-                            <feMerge>
-                                <feMergeNode in="blur"/>
-                                <feMergeNode in="SourceGraphic"/>
-                            </feMerge>
+                        <filter id="blur2" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="2"/>
                         </filter>
                     </defs>
 
-                    <g class="wallet-half-left" filter="url(#shadowM)">
-                        <path d="M30 40 C30 34 34 30 40 30 L58 30 L58 90 L40 90 C34 90 30 86 30 80 Z" fill="url(#walletGradM)"/>
-                        <path d="M30 45 C30 37 36 32 44 32 L55 32 L55 36 L44 36 C40 36 34 40 34 46 L34 74 C34 80 40 84 44 84 L55 84 L55 88 L44 88 C36 88 30 82 30 74 Z" fill="rgba(255,255,255,0.1)"/>
+                    <g class="half-left">
+                        <path d="M26 36 C26 27 33 22 42 22 L60 22 L60 98 L42 98 C33 98 26 93 26 84 Z"
+                              fill="url(#rainbowGrad2)" filter="url(#shadow2)"/>
+                        <g class="blue-overlay-left">
+                            <path d="M26 36 C26 27 33 22 42 22 L60 22 L60 98 L42 98 C33 98 26 93 26 84 Z"
+                                  fill="url(#blueGrad2)" filter="url(#shadow2)"/>
+                            <path d="M29 40 C29 33 34 28 42 28 L48 28 L48 38 L42 38 C38 38 34 42 34 48 L34 55 L29 55 Z"
+                                  fill="url(#highlightGrad2)"/>
+                        </g>
                     </g>
 
-                    <g class="wallet-half-right" filter="url(#shadowM)">
-                        <path d="M62 30 L80 30 C86 30 90 34 90 40 L90 80 C90 86 86 90 80 90 L62 90 Z" fill="url(#walletGradM)"/>
-                        <circle cx="62" cy="60" r="12" fill="#0f0f1a"/>
-                        <path d="M65 32 L76 32 C82 32 86 36 86 42 L86 78 C86 84 82 88 76 88 L65 88 L65 84 L74 84 C78 84 82 80 82 76 L82 44 C82 40 78 36 74 36 L65 36 Z" fill="rgba(255,255,255,0.1)"/>
+                    <g class="half-right">
+                        <path d="M60 22 L78 22 C87 22 94 27 94 36 L94 84 C94 93 87 98 78 98 L60 98 Z"
+                              fill="url(#rainbowGrad2)" filter="url(#shadow2)"/>
+                        <circle cx="60" cy="60" r="15" fill="#0a0a12"/>
+                        <g class="blue-overlay-right">
+                            <path d="M60 22 L78 22 C87 22 94 27 94 36 L94 84 C94 93 87 98 78 98 L60 98 Z"
+                                  fill="url(#blueGrad2)" filter="url(#shadow2)"/>
+                            <circle cx="60" cy="60" r="15" fill="#0a0a12"/>
+                        </g>
                     </g>
 
-                    <g class="rainbow-left" filter="url(#glowM)">
-                        <path d="M32 42 C32 36 36 32 42 32 L56 32 L56 88 L42 88 C36 88 32 84 32 78 Z" fill="url(#rainbowGradLM)" opacity="0.6"/>
-                    </g>
+                    <line class="center-line" x1="60" y1="26" x2="60" y2="94"
+                          stroke="#FF2D6A" stroke-width="2.5" stroke-linecap="round" filter="url(#blur2)"/>
+                    <line class="center-line" x1="60" y1="26" x2="60" y2="94"
+                          stroke="#FF6BA3" stroke-width="1.5" stroke-linecap="round"/>
 
-                    <g class="rainbow-right" filter="url(#glowM)">
-                        <path d="M64 32 L78 32 C84 32 88 36 88 42 L88 78 C88 84 84 88 78 88 L64 88 Z" fill="url(#rainbowGradRM)" opacity="0.6"/>
+                    <g class="coin-group">
+                        <circle cx="60" cy="60" r="12" fill="url(#coinGrad2)" filter="url(#shadow2)"/>
+                        <ellipse cx="56" cy="56" rx="5" ry="4" fill="rgba(255,255,255,0.45)"/>
                     </g>
-
-                    <g class="center-glow">
-                        <line x1="60" y1="35" x2="60" y2="85" stroke="#FF6B9D" stroke-width="2" opacity="0.8"/>
-                        <line x1="60" y1="35" x2="60" y2="85" stroke="#fff" stroke-width="1" opacity="0.5"/>
-                    </g>
-
-                    <g class="wallet-coin">
-                        <circle cx="60" cy="60" r="10" fill="url(#coinGradM)" filter="url(#shadowM)"/>
-                        <circle cx="58" cy="58" r="4" fill="rgba(255,255,255,0.3)"/>
-                    </g>
-
-                    <circle class="sparkle-particle" cx="45" cy="45" r="2" fill="#fff"/>
-                    <circle class="sparkle-particle" cx="75" cy="45" r="2" fill="#fff"/>
-                    <circle class="sparkle-particle" cx="45" cy="75" r="2" fill="#fff"/>
-                    <circle class="sparkle-particle" cx="75" cy="75" r="2" fill="#fff"/>
                 </svg>
             </div>
-            <p>120px - Default</p>
+            <p>120px (Default)</p>
         </div>
 
         <!-- سایز بزرگ -->
         <div class="demo-box">
             <div class="wallet-loader large">
-                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                        <linearGradient id="walletGradL" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#60A5FA"/>
-                            <stop offset="50%" style="stop-color:#3B82F6"/>
-                            <stop offset="100%" style="stop-color:#1E40AF"/>
+                        <linearGradient id="blueGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#6BA3F7"/>
+                            <stop offset="50%" stop-color="#4A8AF5"/>
+                            <stop offset="100%" stop-color="#3070E0"/>
                         </linearGradient>
-                        <linearGradient id="coinGradL" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#FBBF24"/>
-                            <stop offset="100%" style="stop-color:#F59E0B"/>
+                        <linearGradient id="highlightGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#9ECAFF" stop-opacity="0.9"/>
+                            <stop offset="100%" stop-color="#6BA3F7" stop-opacity="0"/>
                         </linearGradient>
-                        <linearGradient id="rainbowGradLL" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#FF6B9D"/>
-                            <stop offset="25%" style="stop-color:#C44AFF"/>
-                            <stop offset="50%" style="stop-color:#44D7FF"/>
-                            <stop offset="75%" style="stop-color:#44FF88"/>
-                            <stop offset="100%" style="stop-color:#FFDD44"/>
+                        <linearGradient id="rainbowGrad3" x1="0%" y1="100%" x2="0%" y2="0%">
+                            <stop offset="0%" stop-color="#FF2D6A"/>
+                            <stop offset="17%" stop-color="#FF6B2D"/>
+                            <stop offset="33%" stop-color="#FFD02D"/>
+                            <stop offset="50%" stop-color="#2DFF6B"/>
+                            <stop offset="67%" stop-color="#2DD0FF"/>
+                            <stop offset="83%" stop-color="#6B2DFF"/>
+                            <stop offset="100%" stop-color="#FF2DD0"/>
                         </linearGradient>
-                        <linearGradient id="rainbowGradRL" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#44FF88"/>
-                            <stop offset="25%" style="stop-color:#44D7FF"/>
-                            <stop offset="50%" style="stop-color:#C44AFF"/>
-                            <stop offset="75%" style="stop-color:#FF6B9D"/>
-                            <stop offset="100%" style="stop-color:#FFDD44"/>
+                        <linearGradient id="coinGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#FFD966"/>
+                            <stop offset="100%" stop-color="#F5A623"/>
                         </linearGradient>
-                        <filter id="shadowL" x="-20%" y="-20%" width="140%" height="140%">
-                            <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#3B82F6" flood-opacity="0.3"/>
+                        <filter id="shadow3" x="-50%" y="-50%" width="200%" height="200%">
+                            <feDropShadow dx="1" dy="3" stdDeviation="3" flood-color="#000" flood-opacity="0.25"/>
                         </filter>
-                        <filter id="glowL" x="-50%" y="-50%" width="200%" height="200%">
-                            <feGaussianBlur stdDeviation="3" result="blur"/>
-                            <feMerge>
-                                <feMergeNode in="blur"/>
-                                <feMergeNode in="SourceGraphic"/>
-                            </feMerge>
+                        <filter id="blur3" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="2"/>
                         </filter>
                     </defs>
 
-                    <g class="wallet-half-left" filter="url(#shadowL)">
-                        <path d="M30 40 C30 34 34 30 40 30 L58 30 L58 90 L40 90 C34 90 30 86 30 80 Z" fill="url(#walletGradL)"/>
-                        <path d="M30 45 C30 37 36 32 44 32 L55 32 L55 36 L44 36 C40 36 34 40 34 46 L34 74 C34 80 40 84 44 84 L55 84 L55 88 L44 88 C36 88 30 82 30 74 Z" fill="rgba(255,255,255,0.1)"/>
+                    <g class="half-left">
+                        <path d="M26 36 C26 27 33 22 42 22 L60 22 L60 98 L42 98 C33 98 26 93 26 84 Z"
+                              fill="url(#rainbowGrad3)" filter="url(#shadow3)"/>
+                        <g class="blue-overlay-left">
+                            <path d="M26 36 C26 27 33 22 42 22 L60 22 L60 98 L42 98 C33 98 26 93 26 84 Z"
+                                  fill="url(#blueGrad3)" filter="url(#shadow3)"/>
+                            <path d="M29 40 C29 33 34 28 42 28 L48 28 L48 38 L42 38 C38 38 34 42 34 48 L34 55 L29 55 Z"
+                                  fill="url(#highlightGrad3)"/>
+                        </g>
                     </g>
 
-                    <g class="wallet-half-right" filter="url(#shadowL)">
-                        <path d="M62 30 L80 30 C86 30 90 34 90 40 L90 80 C90 86 86 90 80 90 L62 90 Z" fill="url(#walletGradL)"/>
-                        <circle cx="62" cy="60" r="12" fill="#0f0f1a"/>
-                        <path d="M65 32 L76 32 C82 32 86 36 86 42 L86 78 C86 84 82 88 76 88 L65 88 L65 84 L74 84 C78 84 82 80 82 76 L82 44 C82 40 78 36 74 36 L65 36 Z" fill="rgba(255,255,255,0.1)"/>
+                    <g class="half-right">
+                        <path d="M60 22 L78 22 C87 22 94 27 94 36 L94 84 C94 93 87 98 78 98 L60 98 Z"
+                              fill="url(#rainbowGrad3)" filter="url(#shadow3)"/>
+                        <circle cx="60" cy="60" r="15" fill="#0a0a12"/>
+                        <g class="blue-overlay-right">
+                            <path d="M60 22 L78 22 C87 22 94 27 94 36 L94 84 C94 93 87 98 78 98 L60 98 Z"
+                                  fill="url(#blueGrad3)" filter="url(#shadow3)"/>
+                            <circle cx="60" cy="60" r="15" fill="#0a0a12"/>
+                        </g>
                     </g>
 
-                    <g class="rainbow-left" filter="url(#glowL)">
-                        <path d="M32 42 C32 36 36 32 42 32 L56 32 L56 88 L42 88 C36 88 32 84 32 78 Z" fill="url(#rainbowGradLL)" opacity="0.6"/>
-                    </g>
+                    <line class="center-line" x1="60" y1="26" x2="60" y2="94"
+                          stroke="#FF2D6A" stroke-width="2.5" stroke-linecap="round" filter="url(#blur3)"/>
+                    <line class="center-line" x1="60" y1="26" x2="60" y2="94"
+                          stroke="#FF6BA3" stroke-width="1.5" stroke-linecap="round"/>
 
-                    <g class="rainbow-right" filter="url(#glowL)">
-                        <path d="M64 32 L78 32 C84 32 88 36 88 42 L88 78 C88 84 84 88 78 88 L64 88 Z" fill="url(#rainbowGradRL)" opacity="0.6"/>
+                    <g class="coin-group">
+                        <circle cx="60" cy="60" r="12" fill="url(#coinGrad3)" filter="url(#shadow3)"/>
+                        <ellipse cx="56" cy="56" rx="5" ry="4" fill="rgba(255,255,255,0.45)"/>
                     </g>
-
-                    <g class="center-glow">
-                        <line x1="60" y1="35" x2="60" y2="85" stroke="#FF6B9D" stroke-width="2" opacity="0.8"/>
-                        <line x1="60" y1="35" x2="60" y2="85" stroke="#fff" stroke-width="1" opacity="0.5"/>
-                    </g>
-
-                    <g class="wallet-coin">
-                        <circle cx="60" cy="60" r="10" fill="url(#coinGradL)" filter="url(#shadowL)"/>
-                        <circle cx="58" cy="58" r="4" fill="rgba(255,255,255,0.3)"/>
-                    </g>
-
-                    <circle class="sparkle-particle" cx="45" cy="45" r="2" fill="#fff"/>
-                    <circle class="sparkle-particle" cx="75" cy="45" r="2" fill="#fff"/>
-                    <circle class="sparkle-particle" cx="45" cy="75" r="2" fill="#fff"/>
-                    <circle class="sparkle-particle" cx="75" cy="75" r="2" fill="#fff"/>
                 </svg>
             </div>
-            <p>180px - Large</p>
+            <p>180px</p>
         </div>
     </div>
 
-    <div style="color: #444; font-size: 12px; margin-top: 20px;">
-        100% Pure CSS/SVG - No Images - Lightweight
-    </div>
+    <p style="color: #333; font-size: 11px; margin-top: 30px;">
+        Pure CSS/SVG - No Images - Exact Lottie Recreation
+    </p>
 </body>
 </html>
