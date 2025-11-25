@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallet Loader - Frame by Frame</title>
+    <title>Wallet Loader - Exact Frame by Frame</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -27,11 +27,10 @@
         }
         .demo-box p { color: #555; margin-top: 15px; font-size: 12px; }
         canvas { display: block; }
-        .info { color: #333; font-size: 11px; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <h1>Wallet Loader - Frame by Frame Animation (Pure Code)</h1>
+    <h1>Wallet Loader - Exact Lottie Recreation</h1>
 
     <div class="demo-row">
         <div class="demo-box">
@@ -48,13 +47,7 @@
         </div>
     </div>
 
-    <p class="info">35 Frames | 30 FPS | Pure Canvas - No Images</p>
-
     <script>
-    /**
-     * WalletLoader - Frame by Frame Animation
-     * هر فریم جداگانه با کد رسم میشه - دقیقاً مثل Lottie اصلی
-     */
     class WalletLoader {
         constructor(canvas, size = 120) {
             this.canvas = canvas;
@@ -62,299 +55,318 @@
             this.size = size;
             this.scale = size / 120;
             this.frame = 0;
-            this.totalFrames = 35;
-            this.fps = 30;
-            this.lastTime = 0;
+            this.totalFrames = 47;
+            this.fps = 60;
             this.frameInterval = 1000 / this.fps;
-            this.running = true;
+            this.lastTime = 0;
+
+            // رنگ‌ها
+            this.blue = { r: 66, g: 133, b: 244 };      // #4285F4
+            this.blueLight = { r: 138, g: 180, b: 248 }; // هایلایت
+            this.coin = { r: 251, g: 188, b: 5 };       // #FBBC05
 
             this.animate = this.animate.bind(this);
             requestAnimationFrame(this.animate);
         }
 
         animate(timestamp) {
-            if (!this.running) return;
-
             if (timestamp - this.lastTime >= this.frameInterval) {
                 this.lastTime = timestamp;
-                this.drawFrame(this.frame);
+                this.renderFrame(this.frame);
                 this.frame = (this.frame + 1) % this.totalFrames;
             }
-
             requestAnimationFrame(this.animate);
         }
 
-        // ترسیم هر فریم بر اساس شماره فریم
-        drawFrame(frameNum) {
+        renderFrame(f) {
             const ctx = this.ctx;
-            const s = this.scale;
-
             ctx.clearRect(0, 0, this.size, this.size);
             ctx.save();
-            ctx.scale(s, s);
+            ctx.scale(this.scale, this.scale);
 
-            // بر اساس شماره فریم، وضعیت را تعیین و رسم کن
-            if (frameNum <= 1) {
-                this.drawNormalWallet();
-            } else if (frameNum <= 3) {
-                this.drawRainbowStart(frameNum - 2);
-            } else if (frameNum <= 5) {
-                this.drawRainbowFull(frameNum - 4);
-            } else if (frameNum <= 8) {
-                this.drawSeparating(frameNum - 6);
-            } else if (frameNum <= 11) {
-                this.drawRotating(frameNum - 9);
-            } else if (frameNum <= 16) {
-                this.drawClosing(frameNum - 12);
-            } else if (frameNum <= 20) {
-                this.drawSecondOpen(frameNum - 17);
-            } else if (frameNum <= 24) {
-                this.drawSecondClose(frameNum - 21);
-            } else {
-                this.drawNormalWallet();
-            }
+            // تعیین پارامترهای هر فریم
+            const params = this.getFrameParams(f);
+
+            // رسم
+            this.drawWallet(params);
 
             ctx.restore();
         }
 
-        // فریم 0-1: کیف پول آبی عادی با سکه
-        drawNormalWallet() {
-            this.drawWalletHalf('left', 0, 0, 1, 0);
-            this.drawWalletHalf('right', 0, 0, 1, 0);
-            this.drawNotch();
-            this.drawCoin(1);
+        getFrameParams(f) {
+            // پارامترهای پیش‌فرض
+            let p = {
+                // موقعیت نیمه‌ها (0 = وسط، منفی = چپ، مثبت = راست)
+                leftX: 0,
+                rightX: 0,
+                // چرخش نیمه راست
+                rightRot: 0,
+                // درصد رنگین‌کمان (0-1)
+                rainbow: 0,
+                // نمایش سکه
+                showCoin: true,
+                // خط صورتی وسط
+                pinkLine: 0,
+                // بلور/سایه اضافی
+                extraBlur: 0
+            };
+
+            // === تایم‌لاین انیمیشن ===
+
+            if (f <= 2) {
+                // فریم 0-2: حالت عادی
+                p.showCoin = true;
+            }
+            else if (f <= 5) {
+                // فریم 3-5: شروع رنگین‌کمان
+                let t = (f - 3) / 3;
+                p.rainbow = t * 0.5;
+                p.showCoin = true;
+            }
+            else if (f <= 8) {
+                // فریم 6-8: رنگین‌کمان کامل
+                let t = (f - 6) / 3;
+                p.rainbow = 0.5 + t * 0.5;
+                p.showCoin = t < 0.5;
+            }
+            else if (f <= 12) {
+                // فریم 9-12: جدا شدن
+                let t = (f - 9) / 4;
+                p.rainbow = 1;
+                p.leftX = -t * 25;
+                p.rightX = t * 25;
+                p.showCoin = false;
+                p.extraBlur = t * 5;
+            }
+            else if (f <= 17) {
+                // فریم 13-17: چرخش نیمه راست
+                let t = (f - 13) / 5;
+                p.rainbow = 1 - t * 0.3;
+                p.leftX = -25 + t * 10;
+                p.rightX = 25 - t * 10;
+                p.rightRot = t * 180;
+                p.showCoin = false;
+                p.extraBlur = 5 - t * 3;
+            }
+            else if (f <= 24) {
+                // فریم 18-24: بسته شدن و برگشت به آبی
+                let t = (f - 18) / 7;
+                p.rainbow = 0.7 - t * 0.7;
+                p.leftX = -15 + t * 15;
+                p.rightX = 15 - t * 15;
+                p.rightRot = 180 - t * 180;
+                p.showCoin = t > 0.7;
+                p.extraBlur = 2 - t * 2;
+            }
+            else if (f <= 30) {
+                // فریم 25-30: باز شدن دوباره با خط صورتی
+                let t = (f - 25) / 6;
+                p.rainbow = 0;
+                p.leftX = -t * 18;
+                p.rightX = t * 18;
+                p.pinkLine = t;
+                p.showCoin = true;
+            }
+            else if (f <= 38) {
+                // فریم 31-38: بسته شدن
+                let t = (f - 31) / 8;
+                p.rainbow = 0;
+                p.leftX = -18 + t * 18;
+                p.rightX = 18 - t * 18;
+                p.pinkLine = 1 - t;
+                p.showCoin = true;
+            }
+            else {
+                // فریم 39-46: حالت عادی
+                p.showCoin = true;
+            }
+
+            return p;
         }
 
-        // فریم 2-3: شروع رنگین‌کمان
-        drawRainbowStart(t) {
-            const progress = t / 2;
-            this.drawWalletHalf('left', 0, progress * 0.4, 1 - progress * 0.4, 0);
-            this.drawWalletHalf('right', 0, progress * 0.4, 1 - progress * 0.4, 0);
-            this.drawNotch();
-            this.drawCoin(1 - progress * 0.5);
-        }
-
-        // فریم 4-5: رنگین‌کمان کامل روی کیف پول
-        drawRainbowFull(t) {
-            const progress = t / 2;
-            const separation = progress * 8;
-            this.drawWalletHalf('left', -separation, 0.4 + progress * 0.6, 0.6 - progress * 0.6, 0);
-            this.drawWalletHalf('right', separation, 0.4 + progress * 0.6, 0.6 - progress * 0.6, 0);
-            this.drawNotch();
-            this.drawCoin(0.5 - progress * 0.5);
-        }
-
-        // فریم 6-8: جدا شدن دو نیمه
-        drawSeparating(t) {
-            const progress = t / 3;
-            const separation = 8 + progress * 14;
-            this.drawWalletHalf('left', -separation, 1, 0, progress * 4);
-            this.drawWalletHalf('right', separation, 1, 0, progress * 4);
-        }
-
-        // فریم 9-11: چرخش نیمه راست
-        drawRotating(t) {
-            const progress = t / 3;
-            const separation = 22 - progress * 8;
-            const rotation = progress * 180;
-            this.drawWalletHalf('left', -separation + progress * 5, 1 - progress * 0.3, progress * 0.3, 4 - progress * 2);
-            this.drawWalletHalf('right', separation - progress * 5, 1 - progress * 0.3, progress * 0.3, 4 - progress * 2, rotation);
-        }
-
-        // فریم 12-16: بسته شدن و برگشت به آبی
-        drawClosing(t) {
-            const progress = t / 5;
-            const separation = 14 - progress * 14;
-            const rotation = 180 - progress * 180;
-            this.drawWalletHalf('left', -separation, 0.7 - progress * 0.7, 0.3 + progress * 0.7, 2 - progress * 2);
-            this.drawWalletHalf('right', separation, 0.7 - progress * 0.7, 0.3 + progress * 0.7, 2 - progress * 2, rotation);
-            this.drawNotch();
-            this.drawCoin(progress);
-        }
-
-        // فریم 17-20: باز شدن دوباره با خط صورتی
-        drawSecondOpen(t) {
-            const progress = t / 4;
-            const separation = progress * 15;
-            this.drawWalletHalf('left', -separation, 0, 1, 0);
-            this.drawWalletHalf('right', separation, 0, 1, 0);
-            this.drawNotch();
-            this.drawCoin(1);
-            this.drawPinkLine(progress);
-        }
-
-        // فریم 21-24: بسته شدن نهایی
-        drawSecondClose(t) {
-            const progress = t / 4;
-            const separation = 15 - progress * 15;
-            this.drawWalletHalf('left', -separation, 0, 1, 0);
-            this.drawWalletHalf('right', separation, 0, 1, 0);
-            this.drawNotch();
-            this.drawCoin(1);
-            this.drawPinkLine(1 - progress);
-        }
-
-        // رسم نیمه کیف پول
-        drawWalletHalf(side, offsetX, rainbowOpacity, blueOpacity, blur, rotation = 0) {
+        drawWallet(p) {
             const ctx = this.ctx;
-            const cx = 60;
-            const cy = 60;
-            const w = 32;
-            const h = 38;
-            const r = 10;
+            const cx = 60, cy = 60; // مرکز
 
+            // ابعاد شکل C
+            const width = 55;
+            const height = 65;
+            const radius = 12;
+            const notchRadius = 13;
+
+            // === رسم نیمه چپ ===
             ctx.save();
-            ctx.translate(cx + offsetX, cy);
-            if (rotation) ctx.rotate(rotation * Math.PI / 180);
+            ctx.translate(cx + p.leftX, cy);
 
             // سایه
-            ctx.shadowColor = 'rgba(0,0,0,0.25)';
-            ctx.shadowBlur = 6 + blur;
-            ctx.shadowOffsetY = 3;
+            ctx.shadowColor = 'rgba(0,0,0,0.3)';
+            ctx.shadowBlur = 8 + p.extraBlur;
+            ctx.shadowOffsetX = -2;
+            ctx.shadowOffsetY = 4;
 
-            // مسیر شکل
+            // شکل نیمه چپ (براکت [)
             ctx.beginPath();
-            if (side === 'left') {
-                ctx.moveTo(-w + r, -h);
-                ctx.lineTo(0, -h);
-                ctx.lineTo(0, h);
-                ctx.lineTo(-w + r, h);
-                ctx.quadraticCurveTo(-w, h, -w, h - r);
-                ctx.lineTo(-w, -h + r);
-                ctx.quadraticCurveTo(-w, -h, -w + r, -h);
-            } else {
-                ctx.moveTo(0, -h);
-                ctx.lineTo(w - r, -h);
-                ctx.quadraticCurveTo(w, -h, w, -h + r);
-                ctx.lineTo(w, h - r);
-                ctx.quadraticCurveTo(w, h, w - r, h);
-                ctx.lineTo(0, h);
-            }
+            ctx.moveTo(-width/2 + radius, -height/2);
+            ctx.lineTo(0, -height/2);
+            ctx.lineTo(0, height/2);
+            ctx.lineTo(-width/2 + radius, height/2);
+            ctx.arcTo(-width/2, height/2, -width/2, height/2 - radius, radius);
+            ctx.lineTo(-width/2, -height/2 + radius);
+            ctx.arcTo(-width/2, -height/2, -width/2 + radius, -height/2, radius);
             ctx.closePath();
 
-            // رنگین‌کمان
-            if (rainbowOpacity > 0) {
-                const grad = ctx.createLinearGradient(0, h, 0, -h);
-                grad.addColorStop(0, '#FF2D6A');
-                grad.addColorStop(0.15, '#FF6B2D');
-                grad.addColorStop(0.3, '#FFD02D');
-                grad.addColorStop(0.5, '#2DFF6B');
-                grad.addColorStop(0.7, '#2DD0FF');
-                grad.addColorStop(0.85, '#6B2DFF');
-                grad.addColorStop(1, '#FF2DD0');
-                ctx.globalAlpha = rainbowOpacity;
+            // رنگ
+            if (p.rainbow > 0) {
+                const grad = ctx.createLinearGradient(0, height/2, 0, -height/2);
+                grad.addColorStop(0, `rgba(255, 51, 102, ${p.rainbow})`);
+                grad.addColorStop(0.17, `rgba(255, 102, 51, ${p.rainbow})`);
+                grad.addColorStop(0.33, `rgba(255, 204, 0, ${p.rainbow})`);
+                grad.addColorStop(0.5, `rgba(51, 255, 102, ${p.rainbow})`);
+                grad.addColorStop(0.67, `rgba(51, 204, 255, ${p.rainbow})`);
+                grad.addColorStop(0.83, `rgba(102, 51, 255, ${p.rainbow})`);
+                grad.addColorStop(1, `rgba(255, 51, 204, ${p.rainbow})`);
                 ctx.fillStyle = grad;
                 ctx.fill();
             }
 
-            // آبی
-            if (blueOpacity > 0) {
+            // لایه آبی
+            if (p.rainbow < 1) {
                 ctx.beginPath();
-                if (side === 'left') {
-                    ctx.moveTo(-w + r, -h);
-                    ctx.lineTo(0, -h);
-                    ctx.lineTo(0, h);
-                    ctx.lineTo(-w + r, h);
-                    ctx.quadraticCurveTo(-w, h, -w, h - r);
-                    ctx.lineTo(-w, -h + r);
-                    ctx.quadraticCurveTo(-w, -h, -w + r, -h);
-                } else {
-                    ctx.moveTo(0, -h);
-                    ctx.lineTo(w - r, -h);
-                    ctx.quadraticCurveTo(w, -h, w, -h + r);
-                    ctx.lineTo(w, h - r);
-                    ctx.quadraticCurveTo(w, h, w - r, h);
-                    ctx.lineTo(0, h);
-                }
+                ctx.moveTo(-width/2 + radius, -height/2);
+                ctx.lineTo(0, -height/2);
+                ctx.lineTo(0, height/2);
+                ctx.lineTo(-width/2 + radius, height/2);
+                ctx.arcTo(-width/2, height/2, -width/2, height/2 - radius, radius);
+                ctx.lineTo(-width/2, -height/2 + radius);
+                ctx.arcTo(-width/2, -height/2, -width/2 + radius, -height/2, radius);
                 ctx.closePath();
 
-                const blueGrad = ctx.createLinearGradient(-w, -h, w, h);
-                blueGrad.addColorStop(0, '#6BA3F7');
-                blueGrad.addColorStop(0.5, '#4A8AF5');
-                blueGrad.addColorStop(1, '#3070E0');
-                ctx.globalAlpha = blueOpacity;
+                const blueGrad = ctx.createLinearGradient(-width/2, -height/2, width/4, height/2);
+                blueGrad.addColorStop(0, '#5BA0F5');
+                blueGrad.addColorStop(0.5, '#4285F4');
+                blueGrad.addColorStop(1, '#3367D6');
+                ctx.globalAlpha = 1 - p.rainbow;
                 ctx.fillStyle = blueGrad;
                 ctx.fill();
 
-                // هایلایت فقط برای نیمه چپ
-                if (side === 'left' && blueOpacity > 0.5) {
-                    ctx.beginPath();
-                    ctx.moveTo(-w + r + 2, -h + 4);
-                    ctx.lineTo(-w + r + 10, -h + 4);
-                    ctx.lineTo(-w + r + 10, -h + 14);
-                    ctx.lineTo(-w + 4, -h + 14);
-                    ctx.quadraticCurveTo(-w + 2, -h + 8, -w + r + 2, -h + 4);
-                    ctx.closePath();
-                    ctx.fillStyle = 'rgba(158, 202, 255, 0.5)';
-                    ctx.globalAlpha = blueOpacity;
-                    ctx.fill();
-                }
+                // هایلایت گوشه
+                ctx.beginPath();
+                ctx.moveTo(-width/2 + radius, -height/2 + 3);
+                ctx.lineTo(-width/2 + radius + 12, -height/2 + 3);
+                ctx.lineTo(-width/2 + radius + 12, -height/2 + 15);
+                ctx.lineTo(-width/2 + 5, -height/2 + 15);
+                ctx.arcTo(-width/2 + 3, -height/2 + 8, -width/2 + radius, -height/2 + 3, 5);
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(139, 191, 255, 0.6)';
+                ctx.fill();
+
+                ctx.globalAlpha = 1;
+            }
+            ctx.restore();
+
+            // === رسم نیمه راست ===
+            ctx.save();
+            ctx.translate(cx + p.rightX, cy);
+            ctx.rotate(p.rightRot * Math.PI / 180);
+
+            ctx.shadowColor = 'rgba(0,0,0,0.3)';
+            ctx.shadowBlur = 8 + p.extraBlur;
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 4;
+
+            // شکل نیمه راست (براکت ] با بریدگی)
+            ctx.beginPath();
+            ctx.moveTo(0, -height/2);
+            ctx.lineTo(width/2 - radius, -height/2);
+            ctx.arcTo(width/2, -height/2, width/2, -height/2 + radius, radius);
+            ctx.lineTo(width/2, -notchRadius);
+            ctx.arc(0, 0, notchRadius, 0, Math.PI * 2, true); // بریدگی سکه - دایره کامل
+            ctx.moveTo(width/2, notchRadius);
+            ctx.lineTo(width/2, height/2 - radius);
+            ctx.arcTo(width/2, height/2, width/2 - radius, height/2, radius);
+            ctx.lineTo(0, height/2);
+            ctx.closePath();
+
+            // رنگ
+            if (p.rainbow > 0) {
+                const grad = ctx.createLinearGradient(0, height/2, 0, -height/2);
+                grad.addColorStop(0, `rgba(255, 51, 102, ${p.rainbow})`);
+                grad.addColorStop(0.17, `rgba(255, 102, 51, ${p.rainbow})`);
+                grad.addColorStop(0.33, `rgba(255, 204, 0, ${p.rainbow})`);
+                grad.addColorStop(0.5, `rgba(51, 255, 102, ${p.rainbow})`);
+                grad.addColorStop(0.67, `rgba(51, 204, 255, ${p.rainbow})`);
+                grad.addColorStop(0.83, `rgba(102, 51, 255, ${p.rainbow})`);
+                grad.addColorStop(1, `rgba(255, 51, 204, ${p.rainbow})`);
+                ctx.fillStyle = grad;
+                ctx.fill('evenodd');
             }
 
+            if (p.rainbow < 1) {
+                ctx.beginPath();
+                ctx.moveTo(0, -height/2);
+                ctx.lineTo(width/2 - radius, -height/2);
+                ctx.arcTo(width/2, -height/2, width/2, -height/2 + radius, radius);
+                ctx.lineTo(width/2, -notchRadius);
+                ctx.arc(0, 0, notchRadius, 0, Math.PI * 2, true);
+                ctx.moveTo(width/2, notchRadius);
+                ctx.lineTo(width/2, height/2 - radius);
+                ctx.arcTo(width/2, height/2, width/2 - radius, height/2, radius);
+                ctx.lineTo(0, height/2);
+                ctx.closePath();
+
+                const blueGrad = ctx.createLinearGradient(-width/4, -height/2, width/2, height/2);
+                blueGrad.addColorStop(0, '#5BA0F5');
+                blueGrad.addColorStop(0.5, '#4285F4');
+                blueGrad.addColorStop(1, '#3367D6');
+                ctx.globalAlpha = 1 - p.rainbow;
+                ctx.fillStyle = blueGrad;
+                ctx.fill('evenodd');
+                ctx.globalAlpha = 1;
+            }
             ctx.restore();
-            ctx.globalAlpha = 1;
-            ctx.shadowBlur = 0;
-            ctx.shadowOffsetY = 0;
-        }
 
-        // رسم بریدگی سکه
-        drawNotch() {
-            const ctx = this.ctx;
-            ctx.beginPath();
-            ctx.arc(60, 60, 14, 0, Math.PI * 2);
-            ctx.fillStyle = '#0a0a12';
-            ctx.fill();
-        }
+            // === خط صورتی ===
+            if (p.pinkLine > 0) {
+                ctx.save();
+                ctx.globalAlpha = p.pinkLine;
+                ctx.strokeStyle = '#FF3366';
+                ctx.lineWidth = 2.5;
+                ctx.lineCap = 'round';
+                ctx.shadowColor = '#FF3366';
+                ctx.shadowBlur = 12;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy - height/2 + 5);
+                ctx.lineTo(cx, cy + height/2 - 5);
+                ctx.stroke();
+                ctx.restore();
+            }
 
-        // رسم سکه
-        drawCoin(scale) {
-            if (scale <= 0) return;
-            const ctx = this.ctx;
+            // === سکه ===
+            if (p.showCoin && p.leftX === 0 && p.rightX === 0) {
+                ctx.save();
+                ctx.translate(cx, cy);
 
-            ctx.save();
-            ctx.translate(60, 60);
-            ctx.scale(scale, scale);
+                ctx.shadowColor = 'rgba(251, 188, 5, 0.5)';
+                ctx.shadowBlur = 6;
 
-            ctx.shadowColor = 'rgba(245, 166, 35, 0.4)';
-            ctx.shadowBlur = 5;
+                const coinGrad = ctx.createRadialGradient(-2, -2, 0, 0, 0, 11);
+                coinGrad.addColorStop(0, '#FFE066');
+                coinGrad.addColorStop(0.7, '#FBBC05');
+                coinGrad.addColorStop(1, '#E8A800');
 
-            const grad = ctx.createRadialGradient(-2, -2, 0, 0, 0, 11);
-            grad.addColorStop(0, '#FFD966');
-            grad.addColorStop(1, '#F5A623');
+                ctx.beginPath();
+                ctx.arc(0, 0, 11, 0, Math.PI * 2);
+                ctx.fillStyle = coinGrad;
+                ctx.fill();
 
-            ctx.beginPath();
-            ctx.arc(0, 0, 11, 0, Math.PI * 2);
-            ctx.fillStyle = grad;
-            ctx.fill();
+                // هایلایت سکه
+                ctx.beginPath();
+                ctx.ellipse(-3, -3, 4, 3, -0.5, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.fill();
 
-            // هایلایت
-            ctx.beginPath();
-            ctx.ellipse(-3, -3, 4, 3, 0, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(255,255,255,0.4)';
-            ctx.fill();
-
-            ctx.restore();
-        }
-
-        // رسم خط صورتی وسط
-        drawPinkLine(opacity) {
-            if (opacity <= 0) return;
-            const ctx = this.ctx;
-
-            ctx.save();
-            ctx.globalAlpha = opacity;
-            ctx.strokeStyle = '#FF2D6A';
-            ctx.lineWidth = 2.5;
-            ctx.lineCap = 'round';
-            ctx.shadowColor = '#FF2D6A';
-            ctx.shadowBlur = 10;
-
-            ctx.beginPath();
-            ctx.moveTo(60, 25);
-            ctx.lineTo(60, 95);
-            ctx.stroke();
-
-            ctx.restore();
+                ctx.restore();
+            }
         }
     }
 
