@@ -1,0 +1,295 @@
+/**
+ * WalletLoader - Pure CSS Animation
+ *
+ * Usage:
+ *   1. Include this CSS file
+ *   2. Copy the HTML structure from wallet-loader.html
+ *   3. Add class "wallet-loader" to your container
+ *   4. Use size variants: small, large
+ *   5. Use speed variants: fast, slow
+ *
+ * Example:
+ *   <div class="wallet-loader small fast">...</div>
+ */
+
+/* ========================================
+   WALLET LOADER - BASE STYLES
+   ======================================== */
+
+.wallet-loader {
+    --wl-size: 120px;
+    --wl-duration: 1.4s;
+    --wl-primary: #3B82F6;
+    --wl-primary-dark: #1E40AF;
+    --wl-primary-light: #60A5FA;
+    --wl-coin: #F59E0B;
+    --wl-coin-light: #FBBF24;
+    --wl-bg: transparent;
+
+    width: var(--wl-size);
+    height: var(--wl-size);
+    position: relative;
+    display: inline-block;
+}
+
+.wallet-loader svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+/* ========================================
+   ANIMATION ELEMENTS
+   ======================================== */
+
+/* Left Half of Wallet */
+.wallet-loader .wallet-half-left {
+    transform-origin: 60px 60px;
+    animation: wl-splitLeft var(--wl-duration) ease-in-out infinite;
+}
+
+/* Right Half of Wallet */
+.wallet-loader .wallet-half-right {
+    transform-origin: 60px 60px;
+    animation: wl-splitRight var(--wl-duration) ease-in-out infinite;
+}
+
+/* Coin */
+.wallet-loader .wallet-coin {
+    animation: wl-coinPop var(--wl-duration) ease-in-out infinite;
+    transform-origin: 60px 60px;
+}
+
+/* Rainbow Effect - Left */
+.wallet-loader .rainbow-left {
+    opacity: 0;
+    animation: wl-rainbowLeft var(--wl-duration) ease-in-out infinite;
+    transform-origin: 60px 60px;
+}
+
+/* Rainbow Effect - Right */
+.wallet-loader .rainbow-right {
+    opacity: 0;
+    animation: wl-rainbowRight var(--wl-duration) ease-in-out infinite;
+    transform-origin: 60px 60px;
+}
+
+/* Center Glow Line */
+.wallet-loader .center-glow {
+    opacity: 0;
+    animation: wl-centerGlow var(--wl-duration) ease-in-out infinite;
+}
+
+/* Sparkle Particles */
+.wallet-loader .sparkle-particle {
+    opacity: 0;
+    animation: wl-sparkle var(--wl-duration) ease-out infinite;
+}
+
+.wallet-loader .sparkle-particle:nth-child(1) { animation-delay: 0.1s; }
+.wallet-loader .sparkle-particle:nth-child(2) { animation-delay: 0.15s; }
+.wallet-loader .sparkle-particle:nth-child(3) { animation-delay: 0.2s; }
+.wallet-loader .sparkle-particle:nth-child(4) { animation-delay: 0.25s; }
+
+/* ========================================
+   KEYFRAMES
+   ======================================== */
+
+@keyframes wl-splitLeft {
+    0%, 10% {
+        transform: translateX(0) scale(1);
+    }
+    25%, 55% {
+        transform: translateX(-12px) scale(1.02);
+    }
+    70%, 100% {
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes wl-splitRight {
+    0%, 10% {
+        transform: translateX(0) scale(1);
+    }
+    25%, 55% {
+        transform: translateX(12px) scale(1.02);
+    }
+    70%, 100% {
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes wl-coinPop {
+    0%, 10% {
+        transform: scale(1) translateY(0);
+    }
+    25%, 35% {
+        transform: scale(1.15) translateY(-3px);
+    }
+    55% {
+        transform: scale(1.1) translateY(-2px);
+    }
+    70%, 100% {
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes wl-rainbowLeft {
+    0%, 10% {
+        opacity: 0;
+        transform: translateX(0);
+    }
+    20%, 60% {
+        opacity: 1;
+        transform: translateX(-10px);
+    }
+    75%, 100% {
+        opacity: 0;
+        transform: translateX(0);
+    }
+}
+
+@keyframes wl-rainbowRight {
+    0%, 10% {
+        opacity: 0;
+        transform: translateX(0);
+    }
+    20%, 60% {
+        opacity: 1;
+        transform: translateX(10px);
+    }
+    75%, 100% {
+        opacity: 0;
+        transform: translateX(0);
+    }
+}
+
+@keyframes wl-centerGlow {
+    0%, 15% {
+        opacity: 0;
+    }
+    25%, 55% {
+        opacity: 1;
+    }
+    70%, 100% {
+        opacity: 0;
+    }
+}
+
+@keyframes wl-sparkle {
+    0%, 15% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    25% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.2);
+    }
+    65%, 100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+}
+
+/* ========================================
+   SIZE VARIANTS
+   ======================================== */
+
+.wallet-loader.small {
+    --wl-size: 60px;
+}
+
+.wallet-loader.medium {
+    --wl-size: 120px;
+}
+
+.wallet-loader.large {
+    --wl-size: 180px;
+}
+
+.wallet-loader.xlarge {
+    --wl-size: 240px;
+}
+
+/* ========================================
+   SPEED VARIANTS
+   ======================================== */
+
+.wallet-loader.fast {
+    --wl-duration: 0.9s;
+}
+
+.wallet-loader.normal {
+    --wl-duration: 1.4s;
+}
+
+.wallet-loader.slow {
+    --wl-duration: 2s;
+}
+
+.wallet-loader.very-slow {
+    --wl-duration: 3s;
+}
+
+/* ========================================
+   PAUSE STATE
+   ======================================== */
+
+.wallet-loader.paused .wallet-half-left,
+.wallet-loader.paused .wallet-half-right,
+.wallet-loader.paused .wallet-coin,
+.wallet-loader.paused .rainbow-left,
+.wallet-loader.paused .rainbow-right,
+.wallet-loader.paused .center-glow,
+.wallet-loader.paused .sparkle-particle {
+    animation-play-state: paused;
+}
+
+/* ========================================
+   CUSTOM COLORS (Override with CSS Variables)
+   ======================================== */
+
+/*
+Example usage:
+.my-custom-loader {
+    --wl-primary: #8B5CF6;
+    --wl-primary-dark: #5B21B6;
+    --wl-primary-light: #A78BFA;
+    --wl-coin: #EC4899;
+    --wl-coin-light: #F472B6;
+}
+*/
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 480px) {
+    .wallet-loader {
+        --wl-size: 80px;
+    }
+
+    .wallet-loader.large {
+        --wl-size: 120px;
+    }
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .wallet-loader .wallet-half-left,
+    .wallet-loader .wallet-half-right,
+    .wallet-loader .wallet-coin,
+    .wallet-loader .rainbow-left,
+    .wallet-loader .rainbow-right,
+    .wallet-loader .center-glow,
+    .wallet-loader .sparkle-particle {
+        animation: none;
+    }
+}
